@@ -1,0 +1,67 @@
+h1 {
+
+
+  font-family: 'Proxima Nova';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 45px;
+  line-height: 45px;
+
+  /* identical to box height */
+
+  /* Acccent - Pines */
+  color: #054546;
+
+
+}
+#container {
+  padding: 75px 50px;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+}
+#explain {
+}
+
+h2 {
+
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 30px;
+
+  /* Vivid green */
+  color: #5BBD8C;
+
+
+}
+
+p#explainSubtitle {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 30px;
+
+  /* Vivid green */
+  color: #283B3D;
+
+
+}
+
+a#detection {
+
+  font-family: 'Proxima Nova';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+
+  /* identical to box height */
+  text-decoration-line: underline;
+
+  /* Tonique 1 - Orange */
+  color: #F6B52A;
+  text-align: right;
+}
