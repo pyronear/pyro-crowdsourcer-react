@@ -33,6 +33,7 @@ export default function Picture(
     // https://stackoverflow.com/questions/24148403/trigger-css-transition-on-appended-element
     // If you still wondering if this is useful or not, try removing it and increasing pictures spawn rate :)
     // Some pictures should appear at the end of their transition as the painting of elements get optimized
+    // eslint-disable-next-line
     const _ =(document.getElementsByClassName(uniqueClassName)[0] as HTMLElement)?.offsetWidth
     setReady(true)
   }, [uniqueClassName])
