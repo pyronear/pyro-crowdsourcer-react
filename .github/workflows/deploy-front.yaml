@@ -1,0 +1,22 @@
+name: Deploy front
+on:
+  push:
+    branches:
+      - main
+    paths:
+    - 'src/**'
+    - '.github/workflows/**'
+    - 'CI/**'
+jobs:
+  deploy-front:
+    defaults:
+      run:
+        working-directory:
+          'front-end'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: ../CI/deploy-front.sh
+      env:
+        SERVER_PRIVATE_SSH_KEY: ${{ secrets.SERVER_PRIVATE_SSH_KEY }}
+        SERVER_IP: ${{ secrets.SERVER_IP }}
