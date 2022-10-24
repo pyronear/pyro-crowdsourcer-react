@@ -1,32 +1,12 @@
 div#carousel {
-  position: absolute; 
-  right: 0;
-  top: 0;
-  width: 25vw;
-  height: 25vw;
+  /* overflow: hidden;
+  rotate: 45deg;
+  z-index: -10; */
+  padding: 5px
 }
 
-#verticalContainer {
-  display: flex;
-  flex-direction: column;
-
-  transform: rotate(45deg);
-}
-
-.horizontalContainer {
-  display: flex;
-  flex-direction: row;
-}
-
-.horizontalContainer.c1 {
-  padding: 0 25px;
-}
-.horizontalContainer.c3 {
-  padding: 0 25px;
-}
 
 img {
-  width: 50px;
-  height: 50px;
-  padding: 5px
+  width: 192px;
+  height: 108px;
 }

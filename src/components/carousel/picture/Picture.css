@@ -1,0 +1,18 @@
+.pic {
+  position:absolute;
+  opacity: 0;
+  height: auto;
+}
+
+.sliding{
+  opacity: 100%;
+
+}
+
+.slidingLeft{
+  transform: translate(-5000px);
+}
+
+.slidingRight{
+  transform: translate(5000px);
+}
