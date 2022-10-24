@@ -14,5 +14,5 @@ jobs:
     - uses: actions/checkout@v3
     - run: CI/deploy-front.sh
       env:
-        SERVER_PRIVATE_SSH_KEY: ${{ secrets.SERVER_PRIVATE_SSH_KEY }}
-        SERVER_IP: ${{ secrets.SERVER_IP }}
+        SERVER_PRIVATE_SSH_KEY: '${{ secrets.SERVER_PRIVATE_SSH_KEY }}'
+        SERVER_IP: '${{ secrets.SERVER_IP }}'
