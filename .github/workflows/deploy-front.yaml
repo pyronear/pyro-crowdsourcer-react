@@ -9,10 +9,6 @@ on:
     - 'CI/**'
 jobs:
   deploy-front:
-    defaults:
-      run:
-        working-directory:
-          'front-end'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
