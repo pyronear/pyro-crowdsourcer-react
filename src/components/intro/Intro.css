@@ -1,8 +1,11 @@
 #introContainer {
   padding: 75px 50px;
-  width: 60%;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+#introText {
+  width: 60%;
 }
 
 #introContainer  h1 {
@@ -63,8 +66,37 @@ a#detection {
   /* Tonique 1 - Orange */
   color: #F6B52A;
   text-align: right;
+  display: block;
 }
 
-#introContainer > Button {
+#introText > Button {
   margin-top: 46px;
+}
+
+
+#straightCarouselContainer {
+  top: 0;
+  position: absolute;
+  /* right: -418px; */
+  /* width: 1600px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* right: -550px; */
+  right: 0;
+  left: 0;
+  top: -10px;
+  bottom: 0;
+  overflow: hidden;
+}
+
+#wideCarouselContainer {
+  rotate: 38.96deg;
+  z-index: -10;
+  position: absolute;
+  width: 100%;
+  top: -10vh;
+  right: -21vw;
+
 }

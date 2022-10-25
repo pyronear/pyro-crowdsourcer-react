@@ -54,9 +54,9 @@ export default function Picture(
     style={{
       transition: `all ${getTransitionTimeInSecondsFromSpeed(speedPixelsPerSecond)}s linear, opacity 1s`,
       ...(reverseDirection ? {
-        right: `${offsetPixel - 2* widthPixels}px`,
+        right: `${offsetPixel}px`,
       } :{
-        left: `${offsetPixel - 2* widthPixels}px`
+        left: `${offsetPixel}px`
       }),
       width: widthPixels
     }}></img>

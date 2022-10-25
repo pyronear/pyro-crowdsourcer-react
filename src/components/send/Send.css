@@ -1,7 +1,6 @@
 #sendContainer {
   background-color: #054546;
   padding: 50px 50px ;
-  width: 100%;
   display: flex;
   flex-direction: column;
 }

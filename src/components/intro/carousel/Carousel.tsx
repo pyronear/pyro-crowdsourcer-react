@@ -3,25 +3,14 @@ import './Carousel.css';
 import Picture from './picture/Picture';
 import { pickOne } from './pictures';
 
-const MAX_ARRAY_SIZE = 10
-
-
-
-const PICTURE_WIDTH_PIXELS = 192;
-const PICTURE_HEIGHT_PIXELS = PICTURE_WIDTH_PIXELS * (1080/1920) // TODO: Do not hard code this
-const PICTURE_PADDING_PIXELS =  10; // Only horizontal padding
-const SPEED_PIXELS_PER_SECOND = 30;
-const PREFILLED_IMAGES = MAX_ARRAY_SIZE; // Prefill array completely
-
-//debug
-const MAX_TRAIN_WIDTH = (MAX_ARRAY_SIZE - 1 ) * (PICTURE_PADDING_PIXELS + PICTURE_WIDTH_PIXELS)
-console.log(MAX_TRAIN_WIDTH)
 
 interface IProps {
   pictureWidthPixel: number,
+  pictureHeightPixel: number,
   picturePaddingPixel: number,
   speedPixelPerSecond: number,
   directionLeftToRight: boolean
+  totalWidthPixel: number
 }
 
 interface IState {
@@ -30,7 +19,7 @@ interface IState {
 }
 export default class Carousel extends Component<IProps, IState> {
   first = false;
-
+  maxArraySize: number;
 
   constructor (props: IProps) {
     super(props);
@@ -38,20 +27,24 @@ export default class Carousel extends Component<IProps, IState> {
       pictures: [],
       nextIndex: 0,
     }
+    this.maxArraySize = Math.ceil(this.props.totalWidthPixel / (this.props.pictureWidthPixel + this.props.picturePaddingPixel) + 2) // Last item is discarded, first item is appearing
+    console.log(this.maxArraySize)
   }
 
   static defaultProps = {
     pictureWidthPixel: 192,
+    pictureHeightPixel: 108,
     picturePaddingPixel: 10,
     speedPixelPerSecond: 30,
     directionLeftToRight: true,
+    totalWidthPixel: 2560,
   }
 
   useEffect() {
   }
 
   calculateNextIndex(previousIndex: number) {
-    if (previousIndex === MAX_ARRAY_SIZE - 1) {
+    if (previousIndex === this.maxArraySize - 1) {
       return 0
     }
     return previousIndex + 1
@@ -59,7 +52,7 @@ export default class Carousel extends Component<IProps, IState> {
 
   // speed = pixels / duration
   // Duration between two spawns = (width of picture + padding between pictures) /speed of picture
-  PICTURE_SPAWN_INTERVAL_MILISECONDS=  (PICTURE_WIDTH_PIXELS + PICTURE_PADDING_PIXELS) / (SPEED_PIXELS_PER_SECOND/1000);
+  PICTURE_SPAWN_INTERVAL_MILISECONDS=  (this.props.pictureWidthPixel + this.props.picturePaddingPixel) / (this.props.speedPixelPerSecond/1000);
 
   appendNewImage(imagePosition=0) {
     this.setState((prevState) => {
@@ -71,7 +64,7 @@ export default class Carousel extends Component<IProps, IState> {
         path={pickOne()}
         widthPixels={this.props.pictureWidthPixel}
         speedPixelsPerSecond={this.props.speedPixelPerSecond}
-        offsetPixel={imagePosition * (PICTURE_WIDTH_PIXELS + PICTURE_PADDING_PIXELS)}
+        offsetPixel={imagePosition * (this.props.pictureWidthPixel + this.props.picturePaddingPixel)}
         reverseDirection={this.props.directionLeftToRight}
       />
       const nextIndex = this.calculateNextIndex(prevState.nextIndex)
@@ -86,7 +79,7 @@ export default class Carousel extends Component<IProps, IState> {
 
   componentDidMount(): void {
     if (this.first) return; this.first = true;
-    for (let i = PREFILLED_IMAGES - 1; i >= 0 ; i--) {
+    for (let i = this.maxArraySize - 1; i >= 0 ; i--) {
       this.appendNewImage(i)
     }
 
@@ -99,8 +92,13 @@ export default class Carousel extends Component<IProps, IState> {
 
   render() {
     return (
-      <div id="carousel" style={{
-        height: `${PICTURE_HEIGHT_PIXELS}px`
+      <div id="carousel"  style={{
+        height: `${this.props.pictureHeightPixel}px`,
+        ...(this.props.directionLeftToRight? {
+          right: `-${this.props.pictureWidthPixel + this.props.picturePaddingPixel}px`
+        }: {
+          left: `-${this.props.pictureWidthPixel + this.props.picturePaddingPixel}px`
+        })
       }}>
           {this.state.pictures}
         {/* <div className="horizontalContainer c2" >
