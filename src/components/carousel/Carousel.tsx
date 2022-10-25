@@ -3,12 +3,19 @@ import './Carousel.css';
 import Picture from './picture/Picture';
 import { pickOne } from './pictures';
 
-const MAX_ARRAY_SIZE = 15
+const MAX_ARRAY_SIZE = 10
+
+
+
 const PICTURE_WIDTH_PIXELS = 192;
 const PICTURE_HEIGHT_PIXELS = PICTURE_WIDTH_PIXELS * (1080/1920) // TODO: Do not hard code this
 const PICTURE_PADDING_PIXELS =  10; // Only horizontal padding
 const SPEED_PIXELS_PER_SECOND = 30;
 const PREFILLED_IMAGES = MAX_ARRAY_SIZE; // Prefill array completely
+
+//debug
+const MAX_TRAIN_WIDTH = (MAX_ARRAY_SIZE - 1 ) * (PICTURE_PADDING_PIXELS + PICTURE_WIDTH_PIXELS)
+console.log(MAX_TRAIN_WIDTH)
 
 interface IProps {
   pictureWidthPixel: number,

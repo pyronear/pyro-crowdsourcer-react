@@ -1,0 +1,44 @@
+.pyro-button {
+  background: #F8FAFF;
+  border:none;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  gap: 10px;
+  height: 59px;
+  width: 210px;
+  box-shadow: none;
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 19px;
+  color: #5BBD8C;
+  transition: all 1s;
+  cursor: pointer;
+  border: 2px solid #5BBD8C;
+}
+
+.pyro-button:hover {
+  background: #5BBD8C;
+  color: #F8FAFF;
+}
+
+.pyro-button.secondary {
+  color: #F6B52A;
+  border-color: #F6B52A;
+}
+
+.pyro-button.secondary:hover {
+  background: #F6B52A;
+  color: #F8FAFF;
+}
+
+.pyro-button:disabled {
+  background: #DCE6EA;
+  color: #F8FAFF;
+  border: none;
+}
+
