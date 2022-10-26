@@ -23,6 +23,10 @@
   line-height: 19px;
 }
 
+#fakeUpload {
+  grid-area: upload;
+}
+
 #photoContainer {
   
 }
@@ -30,6 +34,12 @@
 #uploadHint {
   overflow: hidden;
   padding: 40px;
+  grid-area: hint;
+}
+#form {
+  overflow: visible;
+  padding: 40px;
+  grid-area: form;
 }
 
 #uploadHint > p {
@@ -75,23 +85,22 @@
 .formBox {
   background-color: #F8FAFF;
   border-radius: 10px;
-  min-width: 40%;
+  /* min-width: 40%; */
   box-sizing: border-box;
-  width: 100%;
-  max-width: 800px;
+  width: 95%;
+  /* max-width: 800px; */
   margin: 10px;
+  justify-self: center;
 }
 
 #formContainer {
-
-
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: flex-start;
-  flex-wrap: wrap;
-}
-
-.formColumn {
-  
+  display: grid;
+  grid-template-columns:  1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "upload  hint"
+    "form  hint"
+    ".  hint";
+  align-items: start;
+  justify-content: center;
 }
