@@ -40,13 +40,8 @@ input#hiddenInput {
 }
 
 #fakeUpload {
-  background-color: #F8FAFF;
-  width: 500px;
-  /* height: 80px; */
   display: flex;
   flex-direction: column;
-  border-radius: 10px;
-
   transition: all 0.5s;
 }
 #fakeUpload.draggedOver {

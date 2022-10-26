@@ -4,8 +4,15 @@
   flex-direction: column;
   position: relative;
 }
+#introContainer.mobile {
+  padding: 150px 5vw;
+}
 #introText {
   width: 60%;
+}
+
+#introText.mobile {
+  width: 100%;
 }
 
 #introContainer  h1 {
@@ -86,9 +93,15 @@ a#detection {
   /* right: -550px; */
   right: 0;
   left: 0;
-  top: -10px;
+  top: -10px; /* Go through headerBg */
   bottom: 0;
   overflow: hidden;
+  z-index: -10;
+}
+
+#straightCarouselContainer.mobile {
+  top: 0;
+
 }
 
 #wideCarouselContainer {
@@ -98,5 +111,10 @@ a#detection {
   width: 100%;
   top: -10vh;
   right: -21vw;
-
+}
+#smallCarouselContainer {
+  z-index: -10;
+  position: absolute;
+  width: 100%;
+  top: -65px;
 }

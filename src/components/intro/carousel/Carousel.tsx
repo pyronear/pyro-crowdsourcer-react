@@ -28,7 +28,6 @@ export default class Carousel extends Component<IProps, IState> {
       nextIndex: 0,
     }
     this.maxArraySize = Math.ceil(this.props.totalWidthPixel / (this.props.pictureWidthPixel + this.props.picturePaddingPixel) + 2) // Last item is discarded, first item is appearing
-    console.log(this.maxArraySize)
   }
 
   static defaultProps = {

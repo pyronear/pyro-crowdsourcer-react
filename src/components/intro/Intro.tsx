@@ -3,17 +3,23 @@ import './Intro.css';
 import { faArrowDown } from '@fortawesome/free-solid-svg-icons'
 import Carousel from './carousel/Carousel';
 
-export default function Intro() {
+export default function Intro({isMobile}: {isMobile: boolean}) {
   return (
-    <div id="introContainer">
-      <div id="straightCarouselContainer">
+    <div id="introContainer" className={isMobile? 'mobile': ''}>
+      <div id="straightCarouselContainer" className={isMobile? 'mobile': ''}>
+        {isMobile? 
+        <div id="smallCarouselContainer">
+          <Carousel/>
+          <Carousel directionLeftToRight={false}/>
+        </div>:
         <div id="wideCarouselContainer">
           <Carousel />
           <Carousel directionLeftToRight={false}/>
           <Carousel/>
         </div>
+        }
       </div>
-      <div id="introText">
+      <div id="introText" className={isMobile? 'mobile': ''}>
         <h1>Participez à la protection des forêts</h1>
         <div id="explain">
           <h2>🤝 Comment aider ?</h2>

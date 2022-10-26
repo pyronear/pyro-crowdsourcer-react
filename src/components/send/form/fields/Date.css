@@ -1,0 +1,80 @@
+.pyro-input {
+  border: 0px solid black;
+  border-bottom: 1px solid black;
+  padding-left: 14px;
+}
+
+.pyro-input.invalid {
+border-color: #FD5252;
+}
+
+.pyro-input.valid {
+  border-color: #97ECC2;
+}
+
+.pyro-input-container label {
+  font-family: 'Proxima Nova';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 18px;
+}
+
+.pyro-input-field-container {
+  margin-top: 10px;
+  position: relative;
+}
+
+.pyro-input-field-icon {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 21px;
+  pointer-events: none;
+}
+
+.pyro-input {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 33px;
+  width: 100%;
+}
+
+.react-datepicker__triangle {
+  left: -118px !important;
+  top: -1px !important;
+}
+.select {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  transition: all 0.2s;
+  overflow: scroll;
+  background-color: #FCFCFC;
+}
+.select.open{
+  max-height: 500px;
+}
+
+.select.closed{
+  max-height: 0px;
+}
+
+.select-item {
+  transition: all 0.2s;
+  cursor: pointer;
+  font-size: 24px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding-left: 14px;
+}
+
+.select-item:hover {
+  background-color: #97ECC2;
+}
+.select-item.arrowFocused {
+  background-color: #97ECC2;
+}

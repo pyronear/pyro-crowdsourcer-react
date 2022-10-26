@@ -22,3 +22,76 @@
   font-size: 14px;
   line-height: 19px;
 }
+
+#photoContainer {
+  
+}
+
+#uploadHint {
+  overflow: hidden;
+  padding: 40px;
+}
+
+#uploadHint > p {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 16px;
+  color: #283B3D;
+}
+#uploadHintComparison {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+#uploadHintComparison > div {
+  width: 45%;
+}
+#uploadHintComparison > div  {
+  position: relative;
+}
+
+#uploadHintComparison > div > img {
+  width: 100%;
+}
+
+#uploadHintComparison > div > svg {
+  position: absolute;
+  top: -15px;
+  font-size: 30px;
+  right: -15px;
+}
+
+#uploadHintComparison > div.yes > svg {
+  color: #97ECC2;
+}
+
+#uploadHintComparison > div.no > svg {
+  color: #FC816B;
+
+}
+
+.formBox {
+  background-color: #F8FAFF;
+  border-radius: 10px;
+  min-width: 40%;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 800px;
+  margin: 10px;
+}
+
+#formContainer {
+
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.formColumn {
+  
+}

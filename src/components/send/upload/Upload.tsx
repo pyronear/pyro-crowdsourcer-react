@@ -28,7 +28,6 @@ export default class Upload extends Component<IProps, IState> {
 
   _handleFakeUploadClick = (e: MouseEvent) => {
     e.preventDefault();
-    console.log("hello")
     this.inputFileRef.current?.click()
   }
 
@@ -50,7 +49,6 @@ export default class Upload extends Component<IProps, IState> {
   }
   _handleDrop = (e: DragEvent) => {
     this._handleDragEnd(e);
-    console.log(e.dataTransfer?.files);
     this.completeFileUpload(e.dataTransfer.files)
   }
 
@@ -65,7 +63,6 @@ export default class Upload extends Component<IProps, IState> {
       return
     }
     const file = files[0];
-    
     const splitWithDots = file.name.split(".")
     if (splitWithDots.length < 2) {
       this.setError("Le fichier n'a pas d'extension.")
@@ -91,23 +88,20 @@ export default class Upload extends Component<IProps, IState> {
   render() {
     const {imagePreviewUrl} = this.state;
     return (
-      <div>
-        <div id="fakeUpload" onDragOver={this._handleDragOver} onDragLeave={this._handleDragEnd} onDrop={this._handleDrop} className={`${this.state.draggedOver? 'draggedOver': ''}`}>
+        <div id="fakeUpload" onDragOver={this._handleDragOver} onDragLeave={this._handleDragEnd} onDrop={this._handleDrop} className={`${this.state.draggedOver? 'draggedOver': ''} formBox`}>
           <div id="promptContainer">
-
-          <div className="icon">
-            <FontAwesomeIcon icon={faCloudUpload}/>
+            <div className="icon">
+              <FontAwesomeIcon icon={faCloudUpload}/>
+            </div>
+            <div className="text">
+              <p className="instructions">Glisser/ déposer une photo ici -  <b>ou <span className="browse" onClick={this._handleFakeUploadClick}>parcourir</span></b></p>
+              <p className="constraints">Maximum 200Mb - format acceptés : png, jpeg</p>
+              {this.state.error? <p className="error" >{this.state.error}</p>: <></>}
+            </div>
           </div>
-          <div className="text">
-            <p className="instructions">Glisser/ déposer une photo ici -  <b>ou <span className="browse" onClick={this._handleFakeUploadClick}>parcourir</span></b></p>
-            <p className="constraints">Maximum 200Mb - format acceptés : png, jpeg</p>
-            {this.state.error? <p className="error" >{this.state.error}</p>: <></>}
-          </div>
+          <input id="hiddenInput" ref={this.inputFileRef} type="file" onChange={this._handleImageChange} />
+          {imagePreviewUrl ? <img id="previs" src={imagePreviewUrl} alt="previsualisation"/> : <></>}
         </div>
-        <input id="hiddenInput" ref={this.inputFileRef} type="file" onChange={this._handleImageChange} />
-        {imagePreviewUrl ? <img id="previs" src={imagePreviewUrl} alt="previsualisation"/> : <></>}
-        </div>
-      </div>
     )
   }
 

@@ -22,8 +22,8 @@ function App() {
   return (
     <div id="rootOrganizer">
       <Navbar isMobile={isMobile} />
-      <Intro/>
-      <Send/>
+      <Intro isMobile={isMobile}/>
+      <Send isMobile={isMobile}/>
     </div>
   );
 }
