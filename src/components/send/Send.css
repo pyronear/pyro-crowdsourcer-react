@@ -104,3 +104,15 @@
   align-items: start;
   justify-content: center;
 }
+
+@media screen and (max-width: 800px) {
+  #formContainer {
+    grid-template-columns: auto;
+    grid-template-areas:
+      "upload"
+      "hint"
+      "form";
+    align-items: start;
+    justify-content: center;
+  }
+}
