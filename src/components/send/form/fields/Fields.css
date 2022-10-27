@@ -42,6 +42,9 @@ border-color: #FD5252;
   line-height: 33px;
   width: 100%;
 }
+.pyro-input.closed {
+  cursor: pointer;
+}
 
 .react-datepicker__triangle {
   left: -118px !important;

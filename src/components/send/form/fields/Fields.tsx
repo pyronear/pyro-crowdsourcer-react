@@ -1,4 +1,4 @@
-import { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent, useCallback, useEffect, useState } from 'react'
+import { ChangeEvent, createRef, FocusEvent, KeyboardEvent, MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ReactDatePicker from 'react-datepicker'
 import "./Fields.css"
 import "react-datepicker/dist/react-datepicker.min.css";
@@ -105,13 +105,11 @@ export const DropDown = ({
     resetArrowFocus()
     setInput(inputText)
 
-    debounce(() => {
       setMatchingItems(items.filter((item) => {
         return (simplifyString(item.displayName).includes(simplifyString(inputText)))
       }))
     // checkInputValidity()
 
-    }, 250)
   }
 
   const handleOptionClick = (e: MouseEvent<HTMLLIElement>) => {
@@ -128,7 +126,6 @@ export const DropDown = ({
   }
 
   const checkInputValidity = useCallback(() => {
-    console.log(input, input.length)
     if (input.length === 0) {
       setValid(null);
       return;
@@ -144,7 +141,7 @@ export const DropDown = ({
     <div className="pyro-input-container">
       <label htmlFor={id}>{label}</label>
       <div className='pyro-input-field-container' >
-        <input name={id} id={id} onInput={handleInput} onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} value={input} className={`pyro-input ${valid? "valid": ""} ${valid === false? "invalid": "" }`} placeholder={open? filterPlacehoder: placeholder}/>
+        <input name={id} id={id} onInput={handleInput} onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} value={input} className={`pyro-input ${valid? "valid": ""} ${valid === false? "invalid": "" } ${open? 'open': 'closed'}`} placeholder={open? filterPlacehoder: placeholder}/>
         <ul className={`select ${open? 'open': 'closed'}`}>
           {matchingItems.map(({displayName, value}, index) =>
             <li key={value} value={value} onClick={handleOptionClick} className={`select-item ${arrowFocus === index? "arrowFocused": ""} ${multiple? "multiple": ""}`}>{displayName}</li>
@@ -176,29 +173,37 @@ export const MultipleDropDown = ({
 }) => {
   // Todo: Optimize this hot mess
 
-  let debounceTimer: any;
+
+  let blurTimer: NodeJS.Timeout;
+  const inputRef = createRef<HTMLInputElement>();
 
   type ItemWithSelection = SelectItem & {selected: boolean}
 
   const [itemsWithSelection, setItemsWithSelection] = useState<Array<ItemWithSelection>>(items.map(item => ({...item, selected: false})))
 
   const [input, setInput] = useState<string>("")
-  const [matchingItems, setMatchingItems] = useState<Array<ItemWithSelection>>(itemsWithSelection)
   const [open, setOpen] = useState<boolean>(false)
   const [arrowFocus, setArrowFocus] = useState<number|null>(null);
   const [valid, setValid] = useState<boolean|null>(null)
 
+
   const simplifyString = (input: string) => input.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase()
 
   const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
+    console.log('foc')
+    clearTimeout(blurTimer)
+    clearTimeout(blurTimer)
     e.preventDefault()
     setOpen(true)
   }
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
-    e.preventDefault()
-    resetArrowFocus()
-    // setOpen(false)
+      console.log("blurtim")
+    blurTimer = setTimeout(() => {
+      console.log("blurr")
+      resetArrowFocus()
+      setOpen(false)
+    }, 250)
   }
 
 
@@ -208,86 +213,90 @@ export const MultipleDropDown = ({
     const isArrowUp = (e.key === "ArrowUp")
     const isArrowDown = (e.key === "ArrowDown")
     const isEnter = (e.key === "Enter")
+    const isSpace = (e.key === " ")
 
-    if (!(isArrowDown || isArrowUp || isEnter)) return;
+    if (!(isArrowDown || isArrowUp || isEnter || isSpace)) {
+      resetArrowFocus();
+      return;
+    }
+
+    if (arrowFocus === null && isSpace) {
+      resetArrowFocus();
+      return;
+    }
     e.preventDefault()
     if (isEnter) {
       resetArrowFocus()
       // checkInputValidity()
       setOpen(false)
+      return;
+    }
+    if (isSpace) {
+      selectItem( matchingItems.current[(arrowFocus as number)].displayName )
     }
 
-    let newArrowFocus = (arrowFocus === null ? -1: arrowFocus)
 
+    let newArrowFocus = (arrowFocus === null ? -1: arrowFocus)
     if (isArrowUp) {
       newArrowFocus--
-      if (newArrowFocus < 0) newArrowFocus = matchingItems.length - 1
+      if (newArrowFocus < 0) newArrowFocus = matchingItems.current.length - 1
     }
     if (isArrowDown) {
       newArrowFocus++
-      if (newArrowFocus >= matchingItems.length) newArrowFocus = 0
+      if (newArrowFocus >= matchingItems.current.length) newArrowFocus = 0
     }
-    setInput(matchingItems[newArrowFocus].displayName)
+    setInput(matchingItems.current[newArrowFocus].displayName)
     setArrowFocus(newArrowFocus)
   }
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const inputText = e.target.value
-    resetArrowFocus()
-    setInput(inputText)
 
-    debounce(() => {
-      setMatchingItems(itemsWithSelection.filter((item) => {
-        return (simplifyString(item.displayName).includes(simplifyString(inputText)))
-      }))
-    // checkInputValidity()
-
-    }, 250)
+    setInput(e.target.value)
+    refreshMatchingItems(e.target.value)
   }
 
-  const handleOptionClick = (e: MouseEvent<HTMLLIElement>, optionIndex: number) => {
+  const handleOptionClick = (e: MouseEvent<HTMLLIElement>) => {
     e.preventDefault();
-    setItemsWithSelection((prevItemsWithSelection)=> {
-      const newItemsWithSelection = {...prevItemsWithSelection}
-      newItemsWithSelection[optionIndex].selected = !newItemsWithSelection[optionIndex].selected
-      return prevItemsWithSelection
+    e.stopPropagation()
+    inputRef.current?.focus()
+    console.log('here')
+
+    selectItem((e.target as unknown as {innerText: string}).innerText);
+  }
+
+  const selectItem = (optionText: string) => {
+    const newItemsWithSelection = [...itemsWithSelection]; // Workaround to force react to re-trigger render https://stackoverflow.com/a/67354136/6287237
+    for (let i = 0; i < newItemsWithSelection.length; i++) {
+      if (newItemsWithSelection[i].displayName === optionText) {
+        newItemsWithSelection[i].selected = !newItemsWithSelection[i].selected;
+      }
+    }
+    setItemsWithSelection(newItemsWithSelection)
+  }
+
+  const matchingItems  = useRef<typeof itemsWithSelection>(itemsWithSelection)
+
+  const refreshMatchingItems = (inputFilter: string) => {
+    if (inputFilter === "") {
+      matchingItems.current = itemsWithSelection;
+    }
+    matchingItems.current = itemsWithSelection.filter((item) => {
+      return (simplifyString(item.displayName).includes(simplifyString(inputFilter)))
     })
-    // resetArrowFocus()
-
-    // setInput((e.target as unknown as {innerText: string}).innerText)
   }
 
-  const debounce = (func: () => any, timer: number) => {
-    if (debounceTimer !== null) {
-      clearTimeout(debounceTimer);
-    }
-    debounceTimer = setTimeout(func, timer)
-  }
-
-  const checkInputValidity = useCallback(() => {
-    console.log(input, input.length)
-    if (input.length === 0) {
-      setValid(null);
-      return;
-    }
-    setValid(
-      items.map(({displayName}) => displayName).includes(input)
-    )
-  }, [items, input])
-
-  useEffect(() => {checkInputValidity()})
 
   return (
     <div className="pyro-input-container">
       <label htmlFor={id}>{label}</label>
-      <div className='pyro-input-field-container' >
-        <input name={id} id={id} onInput={handleInput} onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} value={input} className={`pyro-input ${valid? "valid": ""} ${valid === false? "invalid": "" }`} placeholder={open? filterPlacehoder: placeholder}/>
+      <div className='pyro-input-field-container' onBlur={handleBlur} onFocus={() => console.log("foc")}>
+        <input ref={inputRef} name={id} id={id} onKeyDown={handleKeyDown} onInput={handleInput} onFocus={handleFocus}  value={input} className={`pyro-input ${valid? "valid": ""} ${valid === false? "invalid": "" } ${open? 'open': 'closed'}`} placeholder={open? filterPlacehoder: placeholder}/>
         <ul className={`select ${open? 'open': 'closed'}`}>
-          {matchingItems.map(({displayName, value, selected}, index) => 
+          {matchingItems.current.map(({displayName, value, selected}, index) =>
           <>
-            <FontAwesomeIcon icon={selected? faSquareCheck: faSquare}/>
-            <li key={value} value={value} onClick={(e)=> handleOptionClick(e, index)} className={`select-item ${arrowFocus === index? "arrowFocused": ""} ${multiple? "multiple": ""}`}>{displayName}</li>
+            
+            <li key={value} value={value} onClick={handleOptionClick} className={`select-item ${arrowFocus === index? "arrowFocused": ""} ${multiple? "multiple": ""}`}>    <FontAwesomeIcon icon={selected? faSquareCheck: faSquare}/>{displayName}</li>
           </>)}
         </ul>
         <FontAwesomeIcon icon={icon} className="pyro-input-field-icon"/>
