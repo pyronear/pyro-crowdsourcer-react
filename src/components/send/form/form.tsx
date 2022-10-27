@@ -1,4 +1,4 @@
-import { DatePicker, DropDown, MultipleDropDown } from './fields/Fields'
+import { DatePicker, DropDown } from './fields/Fields'
 import './form.css';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
@@ -106,14 +106,14 @@ const departments: Array<{number: string, name: string}> = [
   {number: "976", name: "Mayotte"},
 ]
 
-const observations = [
-  "Fumée",
-  "Ciel",
-  "Nuages",
-  "Flammes",
-  "Brouillard",
-  "Forêt"
-]
+// const observations = [
+//   "Fumée",
+//   "Ciel",
+//   "Nuages",
+//   "Flammes",
+//   "Brouillard",
+//   "Forêt"
+// ]
 
 
 export const Form = () =>
