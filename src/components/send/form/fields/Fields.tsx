@@ -60,8 +60,6 @@ export const DropDown = ({
 }) => {
   // Todo: Optimize this hot mess
 
-  let debounceTimer: any;
-
   const [input, setInput] = useState<string>("")
   const [matchingItems, setMatchingItems] = useState<Array<SelectItem>>(items)
   const [open, setOpen] = useState<boolean>(false)
@@ -192,7 +190,7 @@ export const MultipleDropDown = ({
   const [input, setInput] = useState<string>("")
   const [open, setOpen] = useState<boolean>(false)
   const [arrowFocus, setArrowFocus] = useState<number|null>(null);
-  const [valid, setValid] = useState<boolean|null>(true)
+  const [valid] = useState<boolean|null>(true)
 
   const [selectionDisplayedAsPills, setSelectionDisplayedAsPills] = useState<Array<ItemWithSelection>>([])
 
