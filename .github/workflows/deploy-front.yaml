@@ -7,6 +7,7 @@ on:
     - 'src/**'
     - '.github/workflows/**'
     - 'CI/**'
+    - 'public/**'
 jobs:
   deploy-front:
     runs-on: ubuntu-latest
