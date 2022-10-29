@@ -301,9 +301,10 @@ export const MultipleDropDown = ({
 
   const renderPills = () => {
     const notDisplayedCount = selectedItems.length - croppedselectedItems.length
+    let extraText = (extraCount: number) => croppedselectedItems.length? `${extraCount} autres`: `${extraCount} choix`
     return [
       ...croppedselectedItems.map(({displayName, value}, index) => <p className='pill' key={index}>{displayName} <span data-value={value} onClick={onPillClick}>x</span></p>),
-      ...(notDisplayedCount > 0? [<p className='pill overflow' key={-1}>{notDisplayedCount} autres</p>] : []  )
+      ...(notDisplayedCount > 0? [<p className='pill overflow' key={-1}>{extraText(notDisplayedCount)}</p>] : []  )
     ]
   }
 
