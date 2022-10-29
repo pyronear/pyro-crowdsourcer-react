@@ -303,7 +303,7 @@ export const MultipleDropDown = ({
     const notDisplayedCount = selectedItems.length - croppedselectedItems.length
     return [
       ...croppedselectedItems.map(({displayName, value}, index) => <p className='pill' key={index}>{displayName} <span data-value={value} onClick={onPillClick}>x</span></p>),
-      ...(notDisplayedCount > 0? [<p className='pill' key={-1}>{notDisplayedCount} autres</p>] : []  )
+      ...(notDisplayedCount > 0? [<p className='pill overflow' key={-1}>{notDisplayedCount} autres</p>] : []  )
     ]
   }
 
@@ -325,6 +325,7 @@ export const MultipleDropDown = ({
         + unPx(windowElem.marginRight)
       )
     }
+
     const maxTarget = globalInputRef.current?.scrollWidth - inputRequiredSizePx;
     if (maxTarget  < pillsRef.current?.scrollWidth) {
       // input is too small ! Group the last pills together
@@ -334,7 +335,6 @@ export const MultipleDropDown = ({
       let brokeOut= false
       console.log("=================");
       console.log(selectionDisplayedAsPills)
-
       for (pillCount ; pillCount < pillsRef.current.childNodes.length; pillCount ++) {
         currentWidth += getRealSize(pillsRef.current.children.item(pillCount) as HTMLElement)
         console.log("item", pillCount);
@@ -350,7 +350,9 @@ export const MultipleDropDown = ({
       console.log("should be", pillsRef.current?.scrollWidth)
       if (brokeOut) {
         // Only retrigger re-render if the cropping has changed
-        setSelectionDisplayedAsPills(selectedItems.slice(0, pillCount - 1))
+        if (pillCount === 0 && selectionDisplayedAsPills.length === 0){ return}
+
+        setSelectionDisplayedAsPills(selectedItems.slice(0, Math.max(0, pillCount - 1)))
       }
     }
   }, [globalInputRef, pillsRef, selectionDisplayedAsPills, selectedItems])
