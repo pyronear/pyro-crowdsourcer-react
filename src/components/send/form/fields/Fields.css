@@ -2,6 +2,7 @@
   border: 0px solid black;
   border-bottom: 1px solid black;
   padding-left: 14px;
+  background: none;
 }
 
 .pyro-input.invalid {
@@ -40,6 +41,41 @@ border-color: #FD5252;
   transform: translateY(-50%);
   font-size: 21px;
   pointer-events: none;
+}
+
+div.pyro-input {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+}
+
+div.pyro-input .pill {
+  display: block;
+  background: #054546;
+  color: #FCFCFC;
+  margin: 2px;
+  border-radius: 20px;
+  padding: 1px 10px;
+  white-space: nowrap;
+}
+
+div.pyro-input .pills {
+  display: flex;
+  flex-direction: row;
+}
+div.pyro-input .pills .pill span {
+  cursor: pointer;
+}
+div.pyro-input input {
+  width: 100%;
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 33px;
+  background: none;
+  border: none;
 }
 
 .pyro-input {

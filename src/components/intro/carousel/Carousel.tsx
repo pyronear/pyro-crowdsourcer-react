@@ -39,8 +39,6 @@ export default class Carousel extends Component<IProps, IState> {
     totalWidthPixel: 2560,
   }
 
-  useEffect() {
-  }
 
   calculateNextIndex(previousIndex: number) {
     if (previousIndex === this.maxArraySize - 1) {

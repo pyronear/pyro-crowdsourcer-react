@@ -1,4 +1,4 @@
-import { ChangeEvent, createRef, FocusEvent, KeyboardEvent, MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { ChangeEvent, createRef, FocusEvent, KeyboardEvent, MouseEvent, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import ReactDatePicker from 'react-datepicker'
 import "./Fields.css"
 import "react-datepicker/dist/react-datepicker.min.css";
@@ -131,13 +131,6 @@ export const DropDown = ({
     setInput((e.target as HTMLLIElement).dataset.value as string)
   }
 
-  const debounce = (func: () => any, timer: number) => {
-    if (debounceTimer !== null) {
-      clearTimeout(debounceTimer);
-    }
-    debounceTimer = setTimeout(func, timer)
-  }
-
   const checkInputValidity = useCallback(() => {
     if (input.length === 0) {
       setValid(null);
@@ -176,7 +169,7 @@ export const MultipleDropDown = ({
   multiple = false,
   items = [],
   placeholder = "Select",
-  filterPlacehoder = "Filter"
+  filterPlacehoder = "Filter",
 }: {
   id: string,
   label: string,
@@ -201,21 +194,21 @@ export const MultipleDropDown = ({
   const [arrowFocus, setArrowFocus] = useState<number|null>(null);
   const [valid, setValid] = useState<boolean|null>(true)
 
+  const [selectionDisplayedAsPills, setSelectionDisplayedAsPills] = useState<Array<ItemWithSelection>>([])
+
+  const pillsRef = createRef<HTMLDivElement>();
+  const globalInputRef = createRef<HTMLDivElement>();
 
   const simplifyString = (input: string) => input.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase()
 
   const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
-    console.log('foc')
-    clearTimeout(blurTimer)
     clearTimeout(blurTimer)
     e.preventDefault()
     setOpen(true)
   }
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
-      console.log("blurtim")
     blurTimer = setTimeout(() => {
-      console.log("blurr")
       resetArrowFocus()
       setOpen(false)
     }, 250)
@@ -275,7 +268,6 @@ export const MultipleDropDown = ({
     e.preventDefault();
     e.stopPropagation()
     inputRef.current?.focus()
-    console.log('here')
 
     selectItem((e.target as HTMLLIElement).dataset.value as string);
   }
@@ -288,6 +280,7 @@ export const MultipleDropDown = ({
       }
     }
     setItemsWithSelection(newItemsWithSelection)
+    setSelectionDisplayedAsPills(newItemsWithSelection)
   }
 
   const matchingItems  = useRef<typeof itemsWithSelection>(itemsWithSelection)
@@ -301,18 +294,85 @@ export const MultipleDropDown = ({
     })
   }
 
+  const onPillClick = (e: MouseEvent<HTMLSpanElement>) => {
+    selectItem((e.target as HTMLSpanElement).dataset.value as string)
+  }
+
+  const selectedItems = itemsWithSelection.filter(({selected}) => selected)
+  const croppedselectedItems = selectionDisplayedAsPills.filter(({selected}) => selected)
+
+  const renderPills = () => {
+    const notDisplayedCount = selectedItems.length - croppedselectedItems.length
+    return [
+      ...croppedselectedItems.map(({displayName, value}, index) => <p className='pill' key={index}>{displayName} <span data-value={value} onClick={onPillClick}>x</span></p>),
+      ...(notDisplayedCount > 0? [<p className='pill' key={-1}>{notDisplayedCount} autres</p>] : []  )
+    ]
+  }
+
+  useLayoutEffect(() => {
+    const inputRequiredSizePx = 200;
+    if (! globalInputRef.current || ! pillsRef.current) {
+      return
+    }
+
+    const unPx : (valueWithPx: string) => number = (valueWithPx)  => {
+      return Number(valueWithPx.replace("px", ""))
+    }
+
+    const getRealSize = (elem: HTMLElement) => {
+      const windowElem = window.getComputedStyle(elem)
+      return (
+        unPx(windowElem.marginLeft)
+        + elem.scrollWidth
+        + unPx(windowElem.marginRight)
+      )
+    }
+    const maxTarget = globalInputRef.current?.scrollWidth - inputRequiredSizePx;
+    if (maxTarget  < pillsRef.current?.scrollWidth) {
+      // input is too small ! Group the last pills together
+      let currentWidth = 0;
+      let pillCount = 0;
+
+      let brokeOut= false
+      console.log("=================");
+      console.log(selectionDisplayedAsPills)
+
+      for (pillCount ; pillCount < pillsRef.current.childNodes.length; pillCount ++) {
+        currentWidth += getRealSize(pillsRef.current.children.item(pillCount) as HTMLElement)
+        console.log("item", pillCount);
+        console.log("widt", currentWidth);
+
+        if ( currentWidth > maxTarget) {
+          brokeOut = true
+          break;
+        }
+      }
+      console.log("brokeout", pillCount)
+      console.log("end", currentWidth)
+      console.log("should be", pillsRef.current?.scrollWidth)
+      if (brokeOut) {
+        // Only retrigger re-render if the cropping has changed
+        setSelectionDisplayedAsPills(selectedItems.slice(0, pillCount - 1))
+      }
+    }
+  }, [globalInputRef, pillsRef, selectionDisplayedAsPills, selectedItems])
 
   return (
     <div className="pyro-input-container">
       <label htmlFor={id}>{label}</label>
-      <div className='pyro-input-field-container' onBlur={handleBlur} onFocus={() => console.log("foc")}>
+      <div className='pyro-input-field-container' onBlur={handleBlur}>
         <div className='pyro-input-element-container'>
-          <input ref={inputRef} name={id} id={id} onKeyDown={handleKeyDown} onInput={handleInput} onFocus={handleFocus}  value={input} className={`pyro-input ${valid? "valid": ""} ${valid === false? "invalid": "" } ${open? 'open': 'closed'}`} placeholder={open? filterPlacehoder: placeholder}/>
+          <div ref={globalInputRef} className={`pyro-input ${valid? "valid": ""} ${valid === false? "invalid": "" } ${open? 'open': 'closed'}`}>
+            <div className="pills" ref={pillsRef}>
+              {renderPills()}
+            </div>
+            <input ref={inputRef} name={id} id={id} onKeyDown={handleKeyDown} onInput={handleInput} onFocus={handleFocus}  value={input}  placeholder={open? filterPlacehoder: placeholder}/>
+          </div>
           <FontAwesomeIcon icon={icon} className="pyro-input-field-icon"/>
         </div>
         <ul className={`select ${open? 'open': 'closed'}`}>
           {matchingItems.current.map(({displayName, value, selected}, index) =>
-            <li data-value={value} key={value} value={value} onClick={handleOptionClick} className={`select-item ${arrowFocus === index? "arrowFocused": ""} ${multiple? "multiple": ""}`}>    <FontAwesomeIcon icon={selected? faSquareCheck: faSquare}/>  {displayName}</li>
+            <li data-value={value} key={value} value={value} onClick={handleOptionClick} className={`select-item ${arrowFocus === index? "arrowFocused": ""} ${multiple? "multiple": ""}`}> <FontAwesomeIcon icon={selected? faSquareCheck: faSquare}/>  {displayName}</li>
             )}
         </ul>
       </div>
