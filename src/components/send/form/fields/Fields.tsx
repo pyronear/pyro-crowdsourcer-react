@@ -10,18 +10,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const DatePicker = ({id, label}: {id: string, label: string}) => {
   const [startDate, setStartDate] = useState(new Date());
+  const [valid, setValid] = useState(false)
 
+  const isDateInTheFuture = (date: Date) => {
+    const now = new Date();
+    return date > now;
+  }
 
-  const onDateChange = (date: any,) => {
+  const onDateChange = (date: any) => {
     if (date === null) return;
     setStartDate(date)
+    if (isDateInTheFuture(date)) {
+      return setValid(false);
+    }
+    setValid(true);
   }
+
   return (
     <div className='pyro-input-container'>
       <label htmlFor={id}>{label}</label>
       <div className='pyro-input-field-container' >
-        <ReactDatePicker dateFormat="dd/MM/yyyy HH:mm" showTimeSelect timeFormat='HH:mm' selected={startDate} onChange={onDateChange} className="pyro-input" id={id}/>
-        <FontAwesomeIcon icon={faCalendarDays} className="pyro-input-field-icon"/>
+        <div className='pyro-input-element-container'>
+          <ReactDatePicker dateFormat="dd/MM/yyyy HH:mm" showTimeSelect timeFormat='HH:mm' selected={startDate} onChange={onDateChange} className={`pyro-input ${valid? "valid": ""} ${valid === false? "invalid": "" }`} id={id}/>
+          <FontAwesomeIcon icon={faCalendarDays} className="pyro-input-field-icon"/>
+        </div>
       </div>
     </div>
   )
@@ -115,7 +127,8 @@ export const DropDown = ({
   const handleOptionClick = (e: MouseEvent<HTMLLIElement>) => {
     e.preventDefault();
     resetArrowFocus()
-    setInput((e.target as unknown as {innerText: string}).innerText)
+
+    setInput((e.target as HTMLLIElement).dataset.value as string)
   }
 
   const debounce = (func: () => any, timer: number) => {
@@ -141,13 +154,15 @@ export const DropDown = ({
     <div className="pyro-input-container">
       <label htmlFor={id}>{label}</label>
       <div className='pyro-input-field-container' >
-        <input name={id} id={id} onInput={handleInput} onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} value={input} className={`pyro-input ${valid? "valid": ""} ${valid === false? "invalid": "" } ${open? 'open': 'closed'}`} placeholder={open? filterPlacehoder: placeholder}/>
+        <div className='pyro-input-element-container'>
+          <input name={id} id={id} onInput={handleInput} onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} value={input} className={`pyro-input ${valid? "valid": ""} ${valid === false? "invalid": "" } ${open? 'open': 'closed'}`} placeholder={open? filterPlacehoder: placeholder}/>
+          <FontAwesomeIcon icon={icon} className="pyro-input-field-icon"/>
+        </div>
         <ul className={`select ${open? 'open': 'closed'}`}>
           {matchingItems.map(({displayName, value}, index) =>
-            <li key={value} value={value} onClick={handleOptionClick} className={`select-item ${arrowFocus === index? "arrowFocused": ""} ${multiple? "multiple": ""}`}>{displayName}</li>
+            <li data-value={value} key={value} value={value} onClick={handleOptionClick} className={`select-item ${arrowFocus === index? "arrowFocused": ""} ${multiple? "multiple": ""}`}>{displayName}</li>
           )}
         </ul>
-        <FontAwesomeIcon icon={icon} className="pyro-input-field-icon"/>
       </div>
     </div>
   )
@@ -184,7 +199,7 @@ export const MultipleDropDown = ({
   const [input, setInput] = useState<string>("")
   const [open, setOpen] = useState<boolean>(false)
   const [arrowFocus, setArrowFocus] = useState<number|null>(null);
-  const [valid, setValid] = useState<boolean|null>(null)
+  const [valid, setValid] = useState<boolean|null>(true)
 
 
   const simplifyString = (input: string) => input.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase()
@@ -262,7 +277,7 @@ export const MultipleDropDown = ({
     inputRef.current?.focus()
     console.log('here')
 
-    selectItem((e.target as unknown as {innerText: string}).innerText);
+    selectItem((e.target as HTMLLIElement).dataset.value as string);
   }
 
   const selectItem = (optionText: string) => {
@@ -291,15 +306,15 @@ export const MultipleDropDown = ({
     <div className="pyro-input-container">
       <label htmlFor={id}>{label}</label>
       <div className='pyro-input-field-container' onBlur={handleBlur} onFocus={() => console.log("foc")}>
-        <input ref={inputRef} name={id} id={id} onKeyDown={handleKeyDown} onInput={handleInput} onFocus={handleFocus}  value={input} className={`pyro-input ${valid? "valid": ""} ${valid === false? "invalid": "" } ${open? 'open': 'closed'}`} placeholder={open? filterPlacehoder: placeholder}/>
+        <div className='pyro-input-element-container'>
+          <input ref={inputRef} name={id} id={id} onKeyDown={handleKeyDown} onInput={handleInput} onFocus={handleFocus}  value={input} className={`pyro-input ${valid? "valid": ""} ${valid === false? "invalid": "" } ${open? 'open': 'closed'}`} placeholder={open? filterPlacehoder: placeholder}/>
+          <FontAwesomeIcon icon={icon} className="pyro-input-field-icon"/>
+        </div>
         <ul className={`select ${open? 'open': 'closed'}`}>
           {matchingItems.current.map(({displayName, value, selected}, index) =>
-          <>
-            
-            <li key={value} value={value} onClick={handleOptionClick} className={`select-item ${arrowFocus === index? "arrowFocused": ""} ${multiple? "multiple": ""}`}>    <FontAwesomeIcon icon={selected? faSquareCheck: faSquare}/>{displayName}</li>
-          </>)}
+            <li data-value={value} key={value} value={value} onClick={handleOptionClick} className={`select-item ${arrowFocus === index? "arrowFocused": ""} ${multiple? "multiple": ""}`}>    <FontAwesomeIcon icon={selected? faSquareCheck: faSquare}/>  {displayName}</li>
+            )}
         </ul>
-        <FontAwesomeIcon icon={icon} className="pyro-input-field-icon"/>
       </div>
     </div>
   )

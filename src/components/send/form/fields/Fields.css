@@ -12,6 +12,10 @@ border-color: #FD5252;
   border-color: #97ECC2;
 }
 
+.pyro-input-container {
+  margin: 20px 0;
+}
+
 .pyro-input-container label {
   font-family: 'Proxima Nova';
   font-style: normal;
@@ -22,6 +26,10 @@ border-color: #FD5252;
 
 .pyro-input-field-container {
   margin-top: 10px;
+  position: relative;
+}
+
+.pyro-input-element-container {
   position: relative;
 }
 
@@ -70,8 +78,8 @@ border-color: #FD5252;
   transition: all 0.2s;
   cursor: pointer;
   font-size: 24px;
-  margin-bottom: 5px;
-  margin-top: 5px;
+  padding-bottom: 5px;
+  padding-top: 5px;
   padding-left: 14px;
 }
 
