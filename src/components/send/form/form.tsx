@@ -1,7 +1,6 @@
 import { DatePicker, DropDown, MultipleDropDown } from './fields/Fields'
 import './form.scss';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { Consent } from './consent/Consent';
 
 const departments: Array<{number: string, name: string}> = [
   {number: "01", name: "Ain"},
@@ -124,5 +123,4 @@ export const Form = () =>
     <DropDown id="dept" label="Departement" icon={faChevronDown} items={departments.map(({name}) => ({displayName: name, value: name}))}/>
     <MultipleDropDown id="obs" label="Observations" multiple icon={faChevronDown} items={observations.map((name) => ({displayName: name, value: name}))}/>
 </div>
-<Consent/>
 </>
