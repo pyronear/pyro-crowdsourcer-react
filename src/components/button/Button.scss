@@ -19,26 +19,25 @@
   transition: all 1s;
   cursor: pointer;
   border: 2px solid #5BBD8C;
-}
 
-.pyro-button:hover {
-  background: #5BBD8C;
-  color: #F8FAFF;
-}
+  &:hover {
+    background: #5BBD8C;
+    color: #F8FAFF;
+  }
 
-.pyro-button.secondary {
-  color: #F6B52A;
-  border-color: #F6B52A;
-}
+  &.secondary {
+    color: #F6B52A;
+    border-color: #F6B52A;
+  }
 
-.pyro-button.secondary:hover {
-  background: #F6B52A;
-  color: #F8FAFF;
-}
+  &.secondary:hover {
+    background: #F6B52A;
+    color: #F8FAFF;
+  }
 
-.pyro-button:disabled {
-  background: #DCE6EA;
-  color: #F8FAFF;
-  border: none;
+  &:disabled {
+    background: #DCE6EA;
+    color: #F8FAFF;
+    border: none;
+  }
 }
-

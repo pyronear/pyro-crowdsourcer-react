@@ -1,4 +1,4 @@
-import './Navbar.css';
+import './Navbar.scss';
 
 import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,18 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 const logoUrl = 'https://pyronear.org/img/logo_letters.png'
 
 export default function Navbar({isMobile}: {isMobile: boolean}) {
-
-  // if (isMobile) {
-  //   return (
-  //     <>
-  //       <nav>
-  //         <img id="logo" src={logoUrl} alt="" />
-  //       </nav>
-  //       <div id="headerBg"></div>
-  //     </>
-  //   )
-  // }
-
   return (
     <>
       <nav className={isMobile? 'mobile': ''}>

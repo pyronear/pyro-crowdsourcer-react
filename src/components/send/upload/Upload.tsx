@@ -1,5 +1,5 @@
 import { ChangeEvent, Component, createRef, DragEvent, MouseEvent } from 'react'
-import './Upload.css'
+import './Upload.scss'
 import { faCloudUpload } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -88,12 +88,12 @@ export default class Upload extends Component<IProps, IState> {
   render() {
     const {imagePreviewUrl} = this.state;
     return (
-        <div id="fakeUpload" onDragOver={this._handleDragOver} onDragLeave={this._handleDragEnd} onDrop={this._handleDrop} className={`${this.state.draggedOver? 'draggedOver': ''} formBox`}>
+        <div id="uploadContainer" onDragOver={this._handleDragOver} onDragLeave={this._handleDragEnd} onDrop={this._handleDrop} className={`${this.state.draggedOver? 'draggedOver': ''} formBox`}>
           <div id="promptContainer">
-            <div className="icon">
+            <div className="icon-container">
               <FontAwesomeIcon icon={faCloudUpload}/>
             </div>
-            <div className="text">
+            <div className="text-container">
               <p className="instructions">Glisser/ déposer une photo ici -  <b>ou <span className="browse" onClick={this._handleFakeUploadClick}>parcourir</span></b></p>
               <p className="constraints">Maximum 200Mb - format acceptés : png, jpeg</p>
               {this.state.error? <p className="error" >{this.state.error}</p>: <></>}
@@ -104,5 +104,4 @@ export default class Upload extends Component<IProps, IState> {
         </div>
     )
   }
-
 }

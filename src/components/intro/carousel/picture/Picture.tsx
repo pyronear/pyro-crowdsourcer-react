@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import './Picture.css'
+import './Picture.scss'
 
 export default function Picture(
   {

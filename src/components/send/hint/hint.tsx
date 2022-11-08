@@ -10,11 +10,11 @@ export const Hint = () =>
     <div id="uploadHintComparison">
       <div className='yes'>
         <img src={yes} alt="yes" />
-        <FontAwesomeIcon icon={faCircleCheck}/>
+        <FontAwesomeIcon icon={faCircleCheck} className="yes"/>
       </div>
       <div className='no'>
         <img src={no} alt="no" />
-        <FontAwesomeIcon icon={faCircleXmark}/>
+        <FontAwesomeIcon icon={faCircleXmark} className="no"/>
       </div>
     </div>
   </div>

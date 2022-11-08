@@ -1,5 +1,5 @@
 import Button from '../button/Button';
-import './Intro.css';
+import './Intro.scss';
 import { faArrowDown } from '@fortawesome/free-solid-svg-icons'
 import Carousel from './carousel/Carousel';
 

@@ -1,5 +1,4 @@
-import React from 'react'
-import './Button.css'
+import './Button.scss'
 import {
   IconDefinition,
 } from '@fortawesome/fontawesome-svg-core'

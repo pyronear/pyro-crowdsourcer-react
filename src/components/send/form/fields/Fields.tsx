@@ -1,6 +1,6 @@
 import { ChangeEvent, createRef, FocusEvent, KeyboardEvent, MouseEvent, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import ReactDatePicker from 'react-datepicker'
-import "./Fields.css"
+import "./Fields.scss"
 import "react-datepicker/dist/react-datepicker.min.css";
 
 
@@ -27,13 +27,11 @@ export const DatePicker = ({id, label}: {id: string, label: string}) => {
   }
 
   return (
-    <div className='pyro-input-container'>
+    <div className='field-container'>
       <label htmlFor={id}>{label}</label>
-      <div className='pyro-input-field-container' >
-        <div className='pyro-input-element-container'>
-          <ReactDatePicker dateFormat="dd/MM/yyyy HH:mm" showTimeSelect timeFormat='HH:mm' selected={startDate} onChange={onDateChange} className={`pyro-input ${valid? "valid": ""} ${valid === false? "invalid": "" }`} id={id}/>
-          <FontAwesomeIcon icon={faCalendarDays} className="pyro-input-field-icon"/>
-        </div>
+      <div className='input-container'>
+        <ReactDatePicker dateFormat="dd/MM/yyyy HH:mm" showTimeSelect timeFormat='HH:mm' selected={startDate} onChange={onDateChange} className={`input ${valid? "valid": ""} ${valid === false? "invalid": "" }`} id={id}/>
+        <FontAwesomeIcon icon={faCalendarDays} className="input-icon"/>
       </div>
     </div>
   )
@@ -142,19 +140,17 @@ export const DropDown = ({
   useEffect(() => {checkInputValidity()})
 
   return (
-    <div className="pyro-input-container">
+    <div className="field-container">
       <label htmlFor={id}>{label}</label>
-      <div className='pyro-input-field-container' >
-        <div className='pyro-input-element-container'>
-          <input name={id} id={id} onInput={handleInput} onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} value={input} className={`pyro-input ${valid? "valid": ""} ${valid === false? "invalid": "" } ${open? 'open': 'closed'}`} placeholder={open? filterPlacehoder: placeholder}/>
-          <FontAwesomeIcon icon={icon} className="pyro-input-field-icon"/>
-        </div>
-        <ul className={`select ${open? 'open': 'closed'}`}>
-          {matchingItems.map(({displayName, value}, index) =>
-            <li data-value={value} key={value} value={value} onClick={handleOptionClick} className={`select-item ${arrowFocus === index? "arrowFocused": ""} ${multiple? "multiple": ""}`}>{displayName}</li>
-          )}
-        </ul>
+      <div className='input-container'>
+        <input name={id} id={id} onInput={handleInput} onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} value={input} className={`input ${valid? "valid": ""} ${valid === false? "invalid": "" } ${open? 'open': 'closed'}`} placeholder={open? filterPlacehoder: placeholder}/>
+        <FontAwesomeIcon icon={icon} className="input-icon"/>
       </div>
+      <ul className={`select ${open? 'open': 'closed'}`}>
+        {matchingItems.map(({displayName, value}, index) =>
+          <li data-value={value} key={value} value={value} onClick={handleOptionClick} className={`select-item ${arrowFocus === index? "arrowFocused": ""} ${multiple? "multiple": ""}`}>{displayName}</li>
+        )}
+      </ul>
     </div>
   )
 }
@@ -359,24 +355,22 @@ export const MultipleDropDown = ({
   }, [globalInputRef, pillsRef, selectionDisplayedAsPills, selectedItems])
 
   return (
-    <div className="pyro-input-container">
+    <div className="field-container">
       <label htmlFor={id}>{label}</label>
-      <div className='pyro-input-field-container' onBlur={handleBlur}>
-        <div className='pyro-input-element-container'>
-          <div ref={globalInputRef} className={`pyro-input ${valid? "valid": ""} ${valid === false? "invalid": "" } ${open? 'open': 'closed'}`}>
-            <div className="pills" ref={pillsRef}>
-              {renderPills()}
-            </div>
-            <input ref={inputRef} name={id} id={id} onKeyDown={handleKeyDown} onInput={handleInput} onFocus={handleFocus}  value={input}  placeholder={open? filterPlacehoder: placeholder}/>
+      <div className='input-container' onBlur={handleBlur}>
+        <div ref={globalInputRef} className={`input multiple-select ${valid? "valid": ""} ${valid === false? "invalid": "" } ${open? 'open': 'closed'}`}>
+          <div className="pills" ref={pillsRef}>
+            {renderPills()}
           </div>
-          <FontAwesomeIcon icon={icon} className="pyro-input-field-icon"/>
+          <input ref={inputRef} name={id} id={id} onKeyDown={handleKeyDown} onInput={handleInput} onFocus={handleFocus}  value={input}  placeholder={open? filterPlacehoder: placeholder}/>
         </div>
-        <ul className={`select ${open? 'open': 'closed'}`}>
-          {matchingItems.current.map(({displayName, value, selected}, index) =>
-            <li data-value={value} key={value} value={value} onClick={handleOptionClick} className={`select-item ${arrowFocus === index? "arrowFocused": ""} ${multiple? "multiple": ""}`}> <FontAwesomeIcon icon={selected? faSquareCheck: faSquare}/>  {displayName}</li>
-            )}
-        </ul>
+        <FontAwesomeIcon icon={icon} className="input-icon"/>
       </div>
+      <ul className={`select ${open? 'open': 'closed'}`}>
+        {matchingItems.current.map(({displayName, value, selected}, index) =>
+          <li data-value={value} key={value} value={value} onClick={handleOptionClick} className={`select-item ${arrowFocus === index? "arrowFocused": ""} ${multiple? "multiple": ""}`}> <FontAwesomeIcon icon={selected? faSquareCheck: faSquare}/>  {displayName}</li>
+          )}
+      </ul>
     </div>
   )
 }

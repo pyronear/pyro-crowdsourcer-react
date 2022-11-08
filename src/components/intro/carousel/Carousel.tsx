@@ -1,5 +1,5 @@
 import { Component, ReactElement } from 'react';
-import './Carousel.css';
+import './Carousel.scss';
 import Picture from './picture/Picture';
 import { pickOne } from './pictures';
 
