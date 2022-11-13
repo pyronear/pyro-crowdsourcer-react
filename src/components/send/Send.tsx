@@ -2,6 +2,7 @@ import './Send.scss';
 import Upload from './upload/Upload';
 import { Form } from './form/form';
 import { Hint } from './hint/hint';
+import { Footer } from './footer/footer'
 
 export const Send = ({isMobile}: {isMobile: boolean}) => {
   return (
@@ -13,6 +14,7 @@ export const Send = ({isMobile}: {isMobile: boolean}) => {
             <Hint/>
             <Form/>
         </div>
+        <Footer/>
       </div>
   )
 }
