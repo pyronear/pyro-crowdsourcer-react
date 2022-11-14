@@ -4,6 +4,7 @@ import { faCloudUpload } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 interface IProps {
+  onPictureSubmit: (file: File) => any
 }
 interface IState {
   imagePreviewUrl: string,
@@ -82,6 +83,7 @@ export default class Upload extends Component<IProps, IState> {
         error: null
       });
     }
+    this.props.onPictureSubmit(file)
     reader.readAsDataURL(file)
   }
 

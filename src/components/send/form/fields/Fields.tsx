@@ -1,4 +1,4 @@
-import { ChangeEvent, createRef, FocusEvent, KeyboardEvent, MouseEvent, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { ChangeEvent, createRef, FocusEvent, forwardRef, KeyboardEvent, MouseEvent, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react'
 import ReactDatePicker from 'react-datepicker'
 import "./Fields.scss"
 import "react-datepicker/dist/react-datepicker.min.css";
@@ -8,7 +8,14 @@ import "react-datepicker/dist/react-datepicker.min.css";
 import { faCalendarDays, IconDefinition, faSquare, faSquareCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-export const DatePicker = ({id, label}: {id: string, label: string}) => {
+export const DatePicker = forwardRef(({id, label}: {id: string, label: string}, ref: any) => {
+
+  useImperativeHandle(ref, () => ({
+      updateDate: (date: Date) => {
+        onDateChange(date)
+      }
+    })
+  )
   const [startDate, setStartDate] = useState(new Date());
   const [valid, setValid] = useState(false)
 
@@ -35,7 +42,7 @@ export const DatePicker = ({id, label}: {id: string, label: string}) => {
       </div>
     </div>
   )
-}
+})
 
 type SelectItem = {displayName: string, value: string | number}
 

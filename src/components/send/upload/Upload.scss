@@ -43,6 +43,7 @@ input#hiddenInput {
   display: flex;
   flex-direction: column;
   transition: all 0.5s;
+  overflow: hidden;
   &.draggedOver {
     background: #5BBD8C;
     .icon{
@@ -77,12 +78,12 @@ input#hiddenInput {
 
     p {
       margin: 0;
-    
+
       font-family: 'Noto Sans';
       font-style: normal;
       &.instructions {
         color: #4D6872;
-      
+
         font-weight: 400;
         font-size: 14px;
         line-height: 19px;
