@@ -1,22 +1,22 @@
-import './App.scss';
-import Navbar from './components/navbar/Navbar';
-import Intro from './components/intro/Intro';
-import { Send } from './components/send/Send';
-import { useEffect, useState } from 'react';
+import './App.scss'
+import Navbar from './components/navbar/Navbar'
+import { Intro } from './components/intro/Intro'
+import { Send } from './components/send/Send'
+import { useEffect, useState } from 'react'
 
-function App() {
-  const [isMobile, setIsMobile] = useState(false);
+function App (): JSX.Element {
+  const [isMobile, setIsMobile] = useState(false)
 
-  const onWindowResize = () => {
+  const onWindowResize = (): void => {
     if (window.innerWidth < 650) {
-      setIsMobile(true);
-      return;
+      setIsMobile(true)
+      return
     }
-    setIsMobile(false);
+    setIsMobile(false)
   }
   useEffect(() => {
-    window.addEventListener("resize", onWindowResize);
-    onWindowResize();
+    window.addEventListener('resize', onWindowResize)
+    onWindowResize()
   })
 
   return (
@@ -25,7 +25,7 @@ function App() {
       <Intro isMobile={isMobile}/>
       <Send isMobile={isMobile}/>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

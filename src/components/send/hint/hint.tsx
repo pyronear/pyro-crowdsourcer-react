@@ -4,7 +4,7 @@ import no from '../pictures/no.jpg'
 
 import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-export const Hint = () =>
+export const Hint = (): JSX.Element =>
   <div id="uploadHint" className='formBox' >
     <p>Idéalement partagez-nous une photo depuis une vue assez dégagée sur une zone forestière, avec et/ou sans flamme/ fumées.</p>
     <div id="uploadHintComparison">

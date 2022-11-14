@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import './Picture.scss'
 
-export default function Picture(
+export const Picture = (
   {
     path,
     index,
@@ -10,19 +10,19 @@ export default function Picture(
     offsetPixel,
     reverseDirection
   }: {
-    path: string,
-    index: number,
-    widthPixels: number,
-    speedPixelsPerSecond: number,
-    offsetPixel: number,
+    path: string
+    index: number
+    widthPixels: number
+    speedPixelsPerSecond: number
+    offsetPixel: number
     reverseDirection: boolean // LTR by default, switch to RTL by setting this to true
   }
-) {
-  const [ready, setReady] = useState(false);
+): JSX.Element => {
+  const [ready, setReady] = useState(false)
 
   const uniqueClassName = `pic-${index}`
 
-  const getTransitionTimeInSecondsFromSpeed = (pixelPerSecondSpeed: number) => {
+  const getTransitionTimeInSecondsFromSpeed = (pixelPerSecondSpeed: number): number => {
     // Pictures will try to travel to -1000 pixels
     // speed = distance / time ==> time = distance / speed
     return 5000 / pixelPerSecondSpeed
@@ -40,12 +40,12 @@ export default function Picture(
 
   const getSlidingClass: () => string = () => {
     if (!ready) {
-      return "static"
+      return 'static'
     }
     if (reverseDirection) {
-      return "sliding slidingLeft"
+      return 'sliding slidingLeft'
     }
-    return "sliding slidingRight"
+    return 'sliding slidingRight'
   }
 
   return (
@@ -53,11 +53,13 @@ export default function Picture(
     className={`pic ${uniqueClassName} ${getSlidingClass()}`}
     style={{
       transition: `all ${getTransitionTimeInSecondsFromSpeed(speedPixelsPerSecond)}s linear, opacity 1s`,
-      ...(reverseDirection ? {
-        right: `${offsetPixel}px`,
-      } :{
-        left: `${offsetPixel}px`
-      }),
+      ...(reverseDirection
+        ? {
+            right: `${offsetPixel}px`
+          }
+        : {
+            left: `${offsetPixel}px`
+          }),
       width: widthPixels
     }}></img>
   )

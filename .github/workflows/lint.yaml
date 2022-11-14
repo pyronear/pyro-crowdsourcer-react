@@ -1,0 +1,14 @@
+name: Lint
+on:
+  push:
+    paths:
+    - 'src/**/*.{ts,tsx}'
+    - '.github/workflows/**'
+    - 'public/**'
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: npm install --frozen-lockfile
+    - run: npm run lint -c .eslintrc
