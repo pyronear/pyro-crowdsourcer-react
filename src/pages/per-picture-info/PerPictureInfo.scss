@@ -1,0 +1,39 @@
+#perPictureInfo {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+  .pillsContainer {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+  }
+  h3 {
+    color: #054546;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 27px;
+  }
+  p {
+    color: #054546;
+    width: 343px;
+    height: 19px;
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 19px;
+    &.error {
+      color: #fc816b;
+      .clickable {
+        color: #054546;
+        cursor: pointer;
+      }
+    }
+  }
+}

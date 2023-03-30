@@ -1,0 +1,49 @@
+nav {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 105px 0 105px;
+  background: #ffffff;
+  position: relative;
+
+  &.mobile {
+    justify-content: center;
+  }
+
+  #logo {
+    width: 215px;
+    height: 44px;
+    margin-left: -10px;
+  }
+
+  #about {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    font-family: 'Proxima Nova', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    /* identical to box height */
+    text-decoration-line: underline;
+    /* Acccent - Pines */
+    color: #054546;
+    cursor: pointer;
+
+    &.mobile {
+      position: absolute;
+      right: 25px;
+      font-size: 25px;
+      color: #5bbd8c;
+    }
+  }
+}
+
+#headerBg {
+  width: 100%;
+  height: 11px;
+  background: rgba(91, 189, 140, 0.1);
+  &.mobile {
+    background: #5bbd8c;
+  }
+}

@@ -1,0 +1,47 @@
+.picture-preview {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+  transition: width 1s margin 1s opacity 1s;
+  img {
+    width: 60vw;
+    height: 60vw;
+    &.selected {
+      height: 65vw;
+    }
+    object-fit: cover;
+    transition: all 0.3s;
+    &:not(.selected) {
+      cursor: pointer;
+    }
+    &:not(.clickable) {
+      filter: contrast(50%) saturate(50%);
+    }
+    &.deleting {
+      width: 0px;
+      margin: 0;
+      opacity: 0;
+    }
+  }
+  .deleteIconContainer {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+    background-color: #00000080;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0.5px solid #ffffff;
+    border-radius: 4px;
+    .deleteIcon {
+      font-size: 20px;
+      color: #c00000;
+    }
+  }
+}

@@ -1,0 +1,46 @@
+div.carousel {
+  /* overflow: hidden;
+  rotate: 45deg;
+  z-index: -10; */
+  padding: 5px;
+  width: 100%;
+  position: relative;
+}
+
+#straightCarouselContainer {
+  top: 0;
+  position: relative;
+  /* right: -418px; */
+  /* width: 1600px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* right: -550px; */
+  right: 0;
+  left: 0;
+  top: -10px; /* Go through headerBg */
+  bottom: 0;
+  overflow: hidden;
+  z-index: -10;
+
+  &.mobile {
+    position: unset;
+  }
+
+  #wideCarouselContainer {
+    rotate: 38.96deg;
+    z-index: -10;
+    position: absolute;
+    width: 100%;
+    top: -10vh;
+    right: -30vw;
+  }
+
+  #smallCarouselContainer {
+    z-index: -10;
+    width: 100%;
+    top: -65px;
+    margin-top: -50px;
+  }
+}

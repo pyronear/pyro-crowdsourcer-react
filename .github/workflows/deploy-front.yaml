@@ -8,11 +8,28 @@ on:
     - '.github/workflows/**'
     - 'CI/**'
     - 'public/**'
+  pull_request:
+    types:
+      - "labeled"
+
 jobs:
   deploy-front:
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - run: CI/deploy-front.sh
+      env:
+        SERVER_PRIVATE_SSH_KEY: '${{ secrets.SERVER_PRIVATE_SSH_KEY }}'
+        SERVER_IP: '${{ secrets.SERVER_IP }}'
+  deploy-front-test:
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.*.labels.*.name, 'deploy') }}
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions-ecosystem/action-remove-labels@v1
+      with:
+        labels: deploy
     - run: CI/deploy-front.sh
       env:
         SERVER_PRIVATE_SSH_KEY: '${{ secrets.SERVER_PRIVATE_SSH_KEY }}'

@@ -1,0 +1,19 @@
+.pyro-pill {
+  cursor: pointer;
+  color: #f8faff;
+  background-color: #5bbd8c;
+
+  padding: 8px 10px;
+  margin: 0 10px;
+  border-radius: 8px;
+  .pill-text {
+    font-family: 'Noto Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 19px;
+  }
+  .pill-icon {
+    margin-left: 10px;
+  }
+}

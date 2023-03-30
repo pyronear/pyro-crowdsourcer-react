@@ -25,3 +25,8 @@ code {
 body {
   background: #FCFCFC;
 }
+
+* {
+  margin: 0;
+  padding: 0
+}
