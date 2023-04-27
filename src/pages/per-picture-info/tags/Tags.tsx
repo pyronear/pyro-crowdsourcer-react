@@ -31,7 +31,7 @@ export const Tags = ({ tagEnabled, setTagEnabled }: { tagEnabled: TagState, setT
   }
 
   const tagsElements = allTags.map((tagKey, tagIndex1) => <>
-    <Tag tagInfo={tags[tagKey]} enabled={tagEnabled[tagKey]} onClick={tagKey === 'none' ? onNoneTagClick : onTagClick} key={tagIndex1} tagId={tagKey}/>
+    <Tag tagInfo={tags[tagKey]} enabled={tagEnabled[tagKey]} onClick={tagKey === 'none' ? onNoneTagClick : () => onTagClick(tagKey)} key={tagIndex1}/>
   </>)
   return (
     <div className='tagsContainer'>

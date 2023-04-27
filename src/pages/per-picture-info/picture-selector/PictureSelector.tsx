@@ -65,11 +65,10 @@ export const PictureSelector = ({
           key={pictureIndex}
           className={pictureIndex === currentPictureIndex ? 'selected' : ''}
           picture={picture.file}
-          index={pictureIndex}
           clickable={pictureIsSelectable(pictureIndex)}
           deletable={pictureIndex === currentPictureIndex && pictures.length > 1}
-          onClick={onPictureClick}
-          onSwipe={onPictureSwipe}
+          onClick={() => onPictureClick(pictureIndex)}
+          onSwipe={(pictureSwipePx: number) => onPictureSwipe(pictureIndex, pictureSwipePx)}
           onDelete={deleteCurrentPicture}
           deleting={currentPictureIndex === pictureIndex ? currentPictureDeleting : false } // todo: find out why this is needed
           onDeleteComplete={onCurrentPictureDeleted}
