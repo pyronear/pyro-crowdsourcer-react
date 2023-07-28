@@ -4,9 +4,11 @@ import { Modal, ModalRef } from './modals/Modal'
 import { GlobalInfo, GlobalInfoData } from './pages/global-info/GlobalInfo'
 import { Intro } from './pages/landing/Intro'
 import { Send } from './pages/landing/Send'
-import { PerPictureInfo } from './pages/per-picture-info/PerPictureInfo'
+import { PerPictureInfo, PictureInfo } from './pages/per-picture-info/PerPictureInfo'
 import Navbar from './global-components/navbar/Navbar'
 import { Carousels } from './global-components/carousel/Carousels'
+import { StorageService } from './services/storage/storage.service'
+import { AllTags } from './pages/per-picture-info/tags/resources/tags'
 
 const MOBILE_PX_THRESHOLD = 650
 
@@ -71,11 +73,11 @@ function App (): JSX.Element {
 
   const [stage, setStage] = useState<'IMAGE_UPLOAD' | 'GLOBAL_INFO' | 'PER_PICTURE_INFO' | 'CONFIRM'>('IMAGE_UPLOAD')
 
+  const [imageUploads, setImageUploads] = useState<File[]>([])
   const [globalInfo, setGlobalInfo] = useState<GlobalInfoData | null>(
     { consent: true, datetime: new Date(), departement: 'Aine' }
   )
-
-  const [imageUploads, setImageUploads] = useState<File[]>([])
+  const [, setPicturesInfo] = useState<PictureInfo[]>([])
 
   let content: JSX.Element = <></>
   const onImageUploadSubmit = (files: File[]): void => {
@@ -86,6 +88,15 @@ function App (): JSX.Element {
   const onGlobalInfoSubmit = (globalInfoOutput: GlobalInfoData): void => {
     setGlobalInfo(globalInfoOutput)
     setStage('PER_PICTURE_INFO')
+  }
+
+  const onPerPictureInfoSubmit = async (picturesInfo: PictureInfo[]): Promise<void> => {
+    setPicturesInfo(picturesInfo)
+    const storage = new StorageService()
+    await Promise.all(picturesInfo.map(async (pictureInfo, index): Promise<void> => {
+      await storage.uploadMediaWithAnnotations(pictureInfo.file, Object.keys(pictureInfo.tags).filter((tag) => pictureInfo.tags[tag as AllTags]))
+    }))
+    setStage('CONFIRM')
   }
 
   switch (stage) {
@@ -114,8 +125,15 @@ function App (): JSX.Element {
           {
             modalRef.current === null
               ? <></>
-              : <PerPictureInfo imageUploads={imageUploads} globalInfo={globalInfo} modalRef={modalRef.current} isMobile={isMobile}/>
+              : <PerPictureInfo onSubmit={onPerPictureInfoSubmit} imageUploads={imageUploads} globalInfo={globalInfo} modalRef={modalRef.current} isMobile={isMobile}/>
           }
+        </>
+      )
+      break
+    case 'CONFIRM':
+      content = (
+        <>
+        <p>c bon</p>
         </>
       )
       break

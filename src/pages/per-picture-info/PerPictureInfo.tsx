@@ -19,12 +19,14 @@ export const PerPictureInfo = ({
   globalInfo,
   imageUploads,
   modalRef,
-  isMobile
+  isMobile,
+  onSubmit
 }: {
   globalInfo: GlobalInfoData
   imageUploads: File[]
   modalRef: ModalRef
   isMobile: boolean
+  onSubmit: (picturesInfo: PictureInfo[]) => Promise<void>
 }): JSX.Element => {
   const [perPictureInfo, setPerPictureInfo] = useState<PictureInfo[]>([])
   const [currentPictureIndex, setCurrentPictureIndex] = useState<number>(0)
@@ -110,6 +112,10 @@ export const PerPictureInfo = ({
     setCurrentPictureIndex(firstInvalidPictureIndex)
   }
 
+  const onButtonClick = async (): Promise<void> => {
+    await onSubmit(perPictureInfo)
+  }
+
   if (!isReady) return <></>
   return (
     <div className="contentContainer" id="perPictureInfo">
@@ -131,7 +137,7 @@ export const PerPictureInfo = ({
       <p>Sélectionnez les éléments que vous voyez</p>
       <Tags tagEnabled={perPictureInfo[currentPictureIndex].tags} setTagEnabled={setTagEnabled}/>
       {picturesLeftToTagCount !== null && picturesLeftToTagCount !== 0 && <p className='error'>Il reste {picturesLeftToTagCount} {picturesLeftToTagCount === 1 ? 'photo' : 'photos' } à décrire. <span className='clickable' onClick={selectFirstInvalidPicture}>Voir</span></p>}
-      <Button text='Envoyer' filled={isMobile} disabled={picturesLeftToTagCount !== 0}/>
+      <Button text='Envoyer' filled={isMobile} disabled={picturesLeftToTagCount !== 0} onClick={onButtonClick}/>
     </div>
   )
 }
