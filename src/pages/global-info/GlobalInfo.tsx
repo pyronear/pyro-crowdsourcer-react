@@ -114,17 +114,17 @@ const departments: DepartmentInfo = {
 
 export interface GlobalInfoData {
   datetime: Date
-  departement: string
+  department: string
   consent: boolean
 }
 
 export const GlobalInfo = ({ imageUploads, onSubmit }: { imageUploads: File[], onSubmit: (output: GlobalInfoData) => void }): JSX.Element => {
   const [consentCheckboxChecked, setConsentCheckboxChecked] = useState(false)
   const [date, setDate] = useState<Date | null>(new Date(imageUploads[0].lastModified))
-  const [departement, setDepartement] = useState<string | null>(null)
+  const [department, setDepartment] = useState<string | null>(null)
 
   const isValid = (): boolean => {
-    if (!consentCheckboxChecked && (departement === null)) return false
+    if (!consentCheckboxChecked && (department === null)) return false
     if (date === null || date.getTime() > Date.now()) {
       // If the date is in the future, it's not valid
       return false
@@ -136,7 +136,7 @@ export const GlobalInfo = ({ imageUploads, onSubmit }: { imageUploads: File[], o
     if (!isValid()) { return }
     onSubmit({
       datetime: date!,
-      departement: departement as string,
+      department: department!,
       consent: consentCheckboxChecked
     })
   }
@@ -146,7 +146,7 @@ export const GlobalInfo = ({ imageUploads, onSubmit }: { imageUploads: File[], o
       <h2>Ajoutez des informations pour ces photos </h2>
       <h3>Vous pourrez éditer l&apos;emplacement pour chaque photo à l&#39;étape suivante.</h3>
       <div id="form" className='formBox' >
-        <GlobalInfoForm date={date} onDateTimeChange={setDate} onDepartementChange={setDepartement}/>
+        <GlobalInfoForm date={date} onDateTimeChange={setDate} onDepartmentChange={setDepartment}/>
       </div>
       <Checkbox label="J'accepte que ces photos soient intégrées à un jeu de données public" onChecked={setConsentCheckboxChecked} checked={consentCheckboxChecked}/>
       <Button text='Suivant' filled disabled={!isValid()} onClick={onButtonClick}/>
@@ -156,7 +156,7 @@ export const GlobalInfo = ({ imageUploads, onSubmit }: { imageUploads: File[], o
 
 GlobalInfo.displayName = 'GlobalInfo'
 
-export const GlobalInfoForm = ({ date, onDateTimeChange, onDepartementChange, initialDepartement }: { date: Date | null, onDateTimeChange: (dateTime: Date) => void, onDepartementChange: (departement: string | null) => void, initialDepartement?: string }): JSX.Element => {
+export const GlobalInfoForm = ({ date, onDateTimeChange, onDepartmentChange, initialDepartment }: { date: Date | null, onDateTimeChange: (dateTime: Date) => void, onDepartmentChange: (department: string | null) => void, initialDepartment?: string }): JSX.Element => {
   return (
     <>
       <DateTimePicker dateTime={date} onChange={onDateTimeChange}/>
@@ -166,8 +166,8 @@ export const GlobalInfoForm = ({ date, onDateTimeChange, onDepartementChange, in
         placeholder='Choisir un département'
         icon={faChevronDown}
         items={Object.keys(departments).map((name) => ({ displayName: name, value: name }))}
-        onChange={onDepartementChange}
-        initialValue={initialDepartement}
+        onChange={onDepartmentChange}
+        initialValue={initialDepartment}
       />
     </>
   )

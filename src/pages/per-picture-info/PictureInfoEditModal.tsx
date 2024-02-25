@@ -12,15 +12,15 @@ export type PictureInfoEditModalContext = PictureInfo & {
 
 export const PictureInfoEditModal: ModalInnerComponent = ({ close, context }: { close: () => void, context: PictureInfoEditModalContext }): JSX.Element => {
   const [date, setDate] = useState<Date>(context.datetime)
-  const [departement, setDepartement] = useState<string | null>(context.departement)
+  const [department, setDepartment] = useState<string | null>(context.department)
   const submit = (): void => {
-    context.patchInfo({ datetime: date, departement: departement as string, consent: true })
+    context.patchInfo({ datetime: date, department: department as string, consent: true })
     close()
   }
   // todo : fix validity
   return (<>
     <FontAwesomeIcon icon={faCircleXmark} className='closeIcon' onClick={close}/>
-    <GlobalInfoForm date={date} onDateTimeChange={setDate} onDepartementChange={(d) => setDepartement(d as string)} initialDepartement={context.departement}/>
+    <GlobalInfoForm date={date} onDateTimeChange={setDate} onDepartmentChange={(d) => setDepartment(d as string)} initialDepartment={context.department}/>
     <Button text='Valider' onClick={submit}/>
   </>)
 }

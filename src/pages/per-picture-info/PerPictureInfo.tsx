@@ -131,7 +131,7 @@ export const PerPictureInfo = ({
       <div className="pillsContainer">
         <Pill text={formatDate(perPictureInfo[currentPictureIndex].datetime)} onClick={onPillClick} icon={faPencil}/>
         <Pill text={formatTime(perPictureInfo[currentPictureIndex].datetime)} onClick={onPillClick} icon={faPencil}/>
-        <Pill text={perPictureInfo[currentPictureIndex].departement} onClick={onPillClick} icon={faPencil}/>
+        <Pill text={perPictureInfo[currentPictureIndex].department} onClick={onPillClick} icon={faPencil}/>
       </div>
       <h3>Quels éléments apparaissent ?</h3>
       <p>Sélectionnez les éléments que vous voyez</p>
