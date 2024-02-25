@@ -112,7 +112,7 @@ function App (): JSX.Element {
     case 'GLOBAL_INFO':
       content = (
         <>
-          <GlobalInfo onSubmit={onGlobalInfoSubmit}/>
+          <GlobalInfo imageUploads={imageUploads} onSubmit={onGlobalInfoSubmit}/>
         </>
       )
       break

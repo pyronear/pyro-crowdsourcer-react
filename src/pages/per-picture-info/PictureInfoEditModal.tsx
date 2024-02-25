@@ -5,7 +5,6 @@ import { faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { ModalInnerComponent } from '../../modals/Modal'
 import { GlobalInfoForm, GlobalInfoData } from '../global-info/GlobalInfo'
 import { PictureInfo } from './PerPictureInfo'
-import { Value } from '../../generic-components/select/Select'
 
 export type PictureInfoEditModalContext = PictureInfo & {
   patchInfo: (info: GlobalInfoData) => void
@@ -13,7 +12,7 @@ export type PictureInfoEditModalContext = PictureInfo & {
 
 export const PictureInfoEditModal: ModalInnerComponent = ({ close, context }: { close: () => void, context: PictureInfoEditModalContext }): JSX.Element => {
   const [date, setDate] = useState<Date>(context.datetime)
-  const [departement, setDepartement] = useState<Value>(context.departement)
+  const [departement, setDepartement] = useState<string | null>(context.departement)
   const submit = (): void => {
     context.patchInfo({ datetime: date, departement: departement as string, consent: true })
     close()
@@ -21,7 +20,7 @@ export const PictureInfoEditModal: ModalInnerComponent = ({ close, context }: { 
   // todo : fix validity
   return (<>
     <FontAwesomeIcon icon={faCircleXmark} className='closeIcon' onClick={close}/>
-    <GlobalInfoForm date={date} onDateTimeChange={setDate} onDepartementChange={(d) => setDepartement(d as string)} valid={{ date: true, time: true }} initialDepartement={context.departement}/>
+    <GlobalInfoForm date={date} onDateTimeChange={setDate} onDepartementChange={(d) => setDepartement(d as string)} initialDepartement={context.departement}/>
     <Button text='Valider' onClick={submit}/>
   </>)
 }

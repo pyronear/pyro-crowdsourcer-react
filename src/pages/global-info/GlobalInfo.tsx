@@ -1,7 +1,7 @@
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import './GlobalInfo.scss'
 import { useState } from 'react'
-import { DropDown, Value } from '../../generic-components/select/Select'
+import { DropDown } from '../../generic-components/select/Select'
 import { Checkbox } from '../../generic-components/checkbox/Checkbox'
 import { Button } from '../../generic-components/button/Button'
 import { DateTimePicker } from '../../generic-components/date-time-picker/DateTimePicker'
@@ -111,7 +111,6 @@ const departments: DepartmentInfo = {
   'La Réunion': '974',
   Mayotte: '976'
 }
-type formKey = 'date' | 'time' | 'departement' | 'consent'
 
 export interface GlobalInfoData {
   datetime: Date
@@ -119,72 +118,24 @@ export interface GlobalInfoData {
   consent: boolean
 }
 
-export const GlobalInfo = ({ onSubmit }: { onSubmit: (output: GlobalInfoData) => void }): JSX.Element => {
-  const [valid, setValid] = useState < Record<formKey, boolean>>({
-    date: false,
-    time: false,
-    departement: false,
-    consent: false
-  })
-
-  const isValid = (): boolean => Object.keys(valid).reduce((previousValue, currentKey) => previousValue && valid[currentKey as formKey], true)
-
+export const GlobalInfo = ({ imageUploads, onSubmit }: { imageUploads: File[], onSubmit: (output: GlobalInfoData) => void }): JSX.Element => {
   const [consentCheckboxChecked, setConsentCheckboxChecked] = useState(false)
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState<Date | null>(new Date(imageUploads[0].lastModified))
   const [departement, setDepartement] = useState<string | null>(null)
 
-  const onDateTimeChange = (dateTime: Date): void => {
-    updateDateTimeValidity(dateTime)
-    setDate(dateTime)
-  }
-
-  const updateDateTimeValidity = (dateTime: Date): void => {
-    const toPatch = {
-      date: true,
-      time: true
+  const isValid = (): boolean => {
+    if (!consentCheckboxChecked && (departement === null)) return false
+    if (date === null || date.getTime() > Date.now()) {
+      // If the date is in the future, it's not valid
+      return false
     }
-
-    const now = new Date()
-    const todayAtLatestHour = new Date()
-    todayAtLatestHour.setHours(23)
-    todayAtLatestHour.setMinutes(59)
-    todayAtLatestHour.setSeconds(59)
-    // Check if day is at least tomorrow
-    if (dateTime > todayAtLatestHour) {
-      toPatch.date = false
-      toPatch.time = false
-    // Check if time of day is greater than now
-    } else if (dateTime > now) {
-      toPatch.time = false
-    }
-
-    setValid({
-      ...valid,
-      ...toPatch
-    })
-  }
-
-  const onDepartementChange = (departement: Value | null): void => {
-    let departmentIsValid = true
-    if (departement === null) {
-      departmentIsValid = false
-    }
-    setDepartement(departement as string)
-    setValid({
-      ...valid,
-      departement: departmentIsValid
-    })
-  }
-
-  const onConsentCheckboxCheck = (checked: boolean): void => {
-    setConsentCheckboxChecked(checked)
-    setValid({ ...valid, consent: checked })
+    return true
   }
 
   const onButtonClick = (): void => {
     if (!isValid()) { return }
     onSubmit({
-      datetime: date,
+      datetime: date!,
       departement: departement as string,
       consent: consentCheckboxChecked
     })
@@ -195,9 +146,9 @@ export const GlobalInfo = ({ onSubmit }: { onSubmit: (output: GlobalInfoData) =>
       <h2>Ajoutez des informations pour ces photos </h2>
       <h3>Vous pourrez éditer l&apos;emplacement pour chaque photo à l&#39;étape suivante.</h3>
       <div id="form" className='formBox' >
-        <GlobalInfoForm date={date} onDateTimeChange={onDateTimeChange} valid={valid} onDepartementChange={onDepartementChange}/>
+        <GlobalInfoForm date={date} onDateTimeChange={setDate} onDepartementChange={setDepartement}/>
       </div>
-      <Checkbox label="J'accepte que ces photos soient intégrées à un jeu de données public" onChecked={onConsentCheckboxCheck} checked={consentCheckboxChecked}/>
+      <Checkbox label="J'accepte que ces photos soient intégrées à un jeu de données public" onChecked={setConsentCheckboxChecked} checked={consentCheckboxChecked}/>
       <Button text='Suivant' filled disabled={!isValid()} onClick={onButtonClick}/>
     </div>
   )
@@ -205,10 +156,10 @@ export const GlobalInfo = ({ onSubmit }: { onSubmit: (output: GlobalInfoData) =>
 
 GlobalInfo.displayName = 'GlobalInfo'
 
-export const GlobalInfoForm = ({ date, onDateTimeChange, valid, onDepartementChange, initialDepartement }: { date: Date, onDateTimeChange: (dateTime: Date) => void, valid: { date: boolean, time: boolean }, onDepartementChange: (departement: Value | null) => void, initialDepartement?: string }): JSX.Element => {
+export const GlobalInfoForm = ({ date, onDateTimeChange, onDepartementChange, initialDepartement }: { date: Date | null, onDateTimeChange: (dateTime: Date) => void, onDepartementChange: (departement: string | null) => void, initialDepartement?: string }): JSX.Element => {
   return (
     <>
-      <DateTimePicker dateTime={date} onChange={onDateTimeChange} valid={{ date: valid.date, time: valid.time }}/>
+      <DateTimePicker dateTime={date} onChange={onDateTimeChange}/>
       <DropDown
         id="dept"
         label="Département"
