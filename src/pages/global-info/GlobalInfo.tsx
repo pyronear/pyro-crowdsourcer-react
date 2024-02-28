@@ -119,6 +119,8 @@ export interface GlobalInfoData {
   consent: boolean
 }
 
+export const globalInfoPath = '/global-info'
+
 export const GlobalInfo = ({ onSubmit }: { onSubmit: (output: GlobalInfoData) => void }): JSX.Element => {
   const [valid, setValid] = useState < Record<formKey, boolean>>({
     date: false,

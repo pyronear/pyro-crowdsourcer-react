@@ -15,6 +15,8 @@ export type PictureInfo = GlobalInfoData & {
   tags: Record<AllTags, boolean>
 }
 
+export const perPictureInfoPath = '/per-picture-info'
+
 export const PerPictureInfo = ({
   globalInfo,
   imageUploads,
