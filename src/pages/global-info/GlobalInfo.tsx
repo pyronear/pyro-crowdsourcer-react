@@ -136,7 +136,6 @@ export const GlobalInfo = ({ imageUploads, onSubmit }: { imageUploads: File[], o
   }
 
   const handleDateTimeChange = ({ dateTime, valid }: { dateTime: Date, valid: boolean }): void => {
-    console.log(dateTime, valid)
     setDate(dateTime)
     setDateIsValid(valid)
   }
