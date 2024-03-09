@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`It should mount the about modal 1`] = `
+<div>
+  <svg
+    aria-hidden="true"
+    class="svg-inline--fa fa-circle-xmark closeIcon"
+    data-icon="circle-xmark"
+    data-prefix="fas"
+    focusable="false"
+    role="img"
+    viewBox="0 0 512 512"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+      fill="currentColor"
+    />
+  </svg>
+  <h3>
+    A propos de pyronear
+  </h3>
+  <p>
+    Pyronear est une association à but non lucratif loi 1901 dont l’objectif est de démocratiser des solutions technologiques sobres et ouvertes de lutte contre les incendies de forêts, au service des écosystèmes et des citoyens. Pour cela, nous co-construisons une solution open source de détection détection précoce, performante, automatique, énergiquement sobre, économique et modulable des départs de feux dans les espaces naturels.
+  </p>
+  <p>
+    Pour en savoir plus, rendez-vous sur
+     
+    <a
+      href="https://pyronear.org/"
+    >
+      https://pyronear.org/
+    </a>
+  </p>
+</div>
+`;

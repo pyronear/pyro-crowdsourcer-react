@@ -1,0 +1,19 @@
+name: Test
+on:
+  push:
+    branches:
+      - main
+    paths:
+    - 'src/**/*.{ts,tsx}'
+    - '.github/workflows/**'
+    - 'public/**'
+  pull_request:
+    branches:
+    - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - run: npm install --frozen-lockfile
+    - run: npm test
