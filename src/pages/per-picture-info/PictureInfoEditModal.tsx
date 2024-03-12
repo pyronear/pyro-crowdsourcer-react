@@ -5,6 +5,7 @@ import { faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 import { ModalInnerComponent } from '../../modals/Modal'
 import { GlobalInfoForm, GlobalInfoData } from '../global-info/GlobalInfo'
 import { PictureInfo } from './PerPictureInfo'
+import { isDateAndTimeBeforeNow } from '../../helpers/date'
 
 export type PictureInfoEditModalContext = PictureInfo & {
   patchInfo: (info: GlobalInfoData) => void
@@ -18,14 +19,16 @@ export const PictureInfoEditModal: ModalInnerComponent = ({ close, context }: { 
     close()
   }
 
-  const onDateTimeChange = ({ dateTime, valid }: { dateTime: Date, valid: boolean }): void => {
+  const dateValidity = isDateAndTimeBeforeNow(date)
+
+  const onDateTimeChange = (dateTime: Date): void => {
     setDate(dateTime)
     // todo : handle validity
   }
 
   return (<>
     <FontAwesomeIcon icon={faCircleXmark} className='closeIcon' onClick={close}/>
-    <GlobalInfoForm date={date} onDateTimeChange={onDateTimeChange} onDepartmentChange={(d) => setDepartment(d as string)} initialDepartment={context.department}/>
+    <GlobalInfoForm date={date} onDateTimeChange={onDateTimeChange} onDepartmentChange={(d) => setDepartment(d as string)} initialDepartment={context.department} dateValidity={dateValidity} />
     <Button text='Valider' onClick={submit}/>
   </>)
 }
