@@ -1,4 +1,4 @@
-import { ChangeEvent, FocusEvent, KeyboardEvent, MouseEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FocusEvent, Key, KeyboardEvent, MouseEvent, useEffect, useState } from 'react'
 import 'react-datepicker/dist/react-datepicker.min.css'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,10 +6,9 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import { simplifyString } from '../../helpers/strings'
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 
-export type Value = string | number
-interface SelectItem { displayName: string, value: Value }
+interface SelectItem<T> { displayName: string, value: T }
 
-export const DropDown = ({
+export const DropDown = <T extends Key>({
   id,
   label,
   icon,
@@ -24,17 +23,17 @@ export const DropDown = ({
   label: string
   icon: IconDefinition
   multiple?: boolean
-  items: SelectItem[]
+  items: Array<SelectItem<T>>
   placeholder?: string
   filterPlacehoder?: string
-  onChange: (value: Value | null) => void
+  onChange: (value: T | null) => void
   initialValue?: string | null
 }): JSX.Element => {
   // Todo: Optimize this hot mess
 
   const [input, setInput] = useState<string>('')
   const [confirmedInput, setConfirmedInput] = useState<string>(input)
-  const [matchingItems, setMatchingItems] = useState<SelectItem[]>(items)
+  const [matchingItems, setMatchingItems] = useState<Array<SelectItem<T>>>(items)
   const [open, setOpen] = useState<boolean>(false)
   const [arrowFocus, setArrowFocus] = useState<number | null>(null)
   const [valid, setValid] = useState<boolean | null>(null)

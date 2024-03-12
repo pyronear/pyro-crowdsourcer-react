@@ -77,7 +77,7 @@ function App (): JSX.Element {
 
   const [imageUploads, setImageUploads] = useState<File[]>([])
   const [globalInfo, setGlobalInfo] = useState<GlobalInfoData | null>(
-    { consent: true, datetime: new Date(), departement: 'Aine' }
+    { consent: true, datetime: new Date(), department: 'Aine' }
   )
   const [, setPicturesInfo] = useState<PictureInfo[]>([])
 
@@ -116,7 +116,7 @@ function App (): JSX.Element {
           <Send isMobile={isMobile} onSubmit={onImageUploadSubmit} />
         </Route>
         <Route exact path={globalInfoPath} >
-          <GlobalInfo onSubmit={onGlobalInfoSubmit} />
+          <GlobalInfo imageUploads={imageUploads} onSubmit={onGlobalInfoSubmit} />
         </Route>
         <Route exact path={perPictureInfoPath} >
           {
