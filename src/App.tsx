@@ -75,7 +75,7 @@ function App (): JSX.Element {
 
   const [imageUploads, setImageUploads] = useState<File[]>([])
   const [globalInfo, setGlobalInfo] = useState<GlobalInfoData | null>(
-    { consent: true, datetime: new Date(), departement: 'Aine' }
+    { consent: true, datetime: new Date(), department: 'Aine' }
   )
   const [, setPicturesInfo] = useState<PictureInfo[]>([])
 
@@ -112,7 +112,7 @@ function App (): JSX.Element {
     case 'GLOBAL_INFO':
       content = (
         <>
-          <GlobalInfo onSubmit={onGlobalInfoSubmit}/>
+          <GlobalInfo imageUploads={imageUploads} onSubmit={onGlobalInfoSubmit}/>
         </>
       )
       break
