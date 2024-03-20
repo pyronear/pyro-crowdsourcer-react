@@ -5,6 +5,7 @@ import { DropDown } from '../../generic-components/select/Select'
 import { Checkbox } from '../../generic-components/checkbox/Checkbox'
 import { Button } from '../../generic-components/button/Button'
 import { DateTimePicker } from '../../generic-components/date-time-picker/DateTimePicker'
+import { type DateValidity, isDateAndTimeBeforeNow } from '../../helpers/date'
 
 type DepartmentInfo = Record<string, string>
 
@@ -118,26 +119,27 @@ export interface GlobalInfoData {
   consent: boolean
 }
 
+export const globalInfoPath = '/global-info'
+
 export const GlobalInfo = ({ imageUploads, onSubmit }: { imageUploads: File[], onSubmit: (output: GlobalInfoData) => void }): JSX.Element => {
   const [consentCheckboxChecked, setConsentCheckboxChecked] = useState(false)
-  const [dateIsValid, setDateIsValid] = useState<boolean>(false)
-  const [date, setDate] = useState<Date | null>(new Date(imageUploads[0].lastModified))
+  const [date, setDate] = useState<Date>(new Date(imageUploads[0].lastModified))
   const [department, setDepartment] = useState<string | null>(null)
 
-  const isValid = (): boolean => consentCheckboxChecked && dateIsValid && department !== null
+  const dateValidity = isDateAndTimeBeforeNow(date)
+  const isValid = consentCheckboxChecked && dateValidity.date && dateValidity.time && department !== null
 
   const onButtonClick = (): void => {
-    if (!isValid()) { return }
+    if (!isValid) { return }
     onSubmit({
-      datetime: date!,
-      department: department!,
+      datetime: date,
+      department,
       consent: consentCheckboxChecked
     })
   }
 
-  const handleDateTimeChange = ({ dateTime, valid }: { dateTime: Date, valid: boolean }): void => {
+  const handleDateTimeChange = (dateTime: Date): void => {
     setDate(dateTime)
-    setDateIsValid(valid)
   }
 
   return (
@@ -145,20 +147,20 @@ export const GlobalInfo = ({ imageUploads, onSubmit }: { imageUploads: File[], o
       <h2>Ajoutez des informations pour ces photos </h2>
       <h3>Vous pourrez éditer l&apos;emplacement pour chaque photo à l&#39;étape suivante.</h3>
       <div id="form" className='formBox' >
-        <GlobalInfoForm date={date} onDateTimeChange={handleDateTimeChange} onDepartmentChange={setDepartment}/>
+        <GlobalInfoForm date={date} onDateTimeChange={handleDateTimeChange} onDepartmentChange={setDepartment} dateValidity={dateValidity}/>
       </div>
       <Checkbox label="J'accepte que ces photos soient intégrées à un jeu de données public" onChecked={setConsentCheckboxChecked} checked={consentCheckboxChecked}/>
-      <Button text='Suivant' filled disabled={!isValid()} onClick={onButtonClick}/>
+      <Button text='Suivant' filled disabled={!isValid} onClick={onButtonClick}/>
     </div>
   )
 }
 
 GlobalInfo.displayName = 'GlobalInfo'
 
-export const GlobalInfoForm = ({ date, onDateTimeChange, onDepartmentChange, initialDepartment }: { date: Date | null, onDateTimeChange: ({ dateTime, valid }: { dateTime: Date, valid: boolean }) => void, onDepartmentChange: (department: string | null) => void, initialDepartment?: string }): JSX.Element => {
+export const GlobalInfoForm = ({ date, onDateTimeChange, onDepartmentChange, initialDepartment, dateValidity }: { date: Date | null, onDateTimeChange: (dateTime: Date) => void, onDepartmentChange: (department: string | null) => void, initialDepartment?: string, dateValidity: DateValidity }): JSX.Element => {
   return (
     <>
-      <DateTimePicker dateTime={date} onChange={onDateTimeChange}/>
+      <DateTimePicker dateTime={date} onChange={onDateTimeChange} valid={dateValidity}/>
       <DropDown
         id="dept"
         label="Département"
