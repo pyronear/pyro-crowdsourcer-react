@@ -1,14 +1,16 @@
 import './App.scss'
 import { useEffect, useRef, useState } from 'react'
 import { Modal, ModalRef } from './modals/Modal'
-import { GlobalInfo, GlobalInfoData } from './pages/global-info/GlobalInfo'
+import { GlobalInfo, GlobalInfoData, globalInfoPath } from './pages/global-info/GlobalInfo'
 import { Intro } from './pages/landing/Intro'
 import { Send } from './pages/landing/Send'
-import { PerPictureInfo, PictureInfo } from './pages/per-picture-info/PerPictureInfo'
+import { PerPictureInfo, PictureInfo, perPictureInfoPath } from './pages/per-picture-info/PerPictureInfo'
 import Navbar from './global-components/navbar/Navbar'
 import { Carousels } from './global-components/carousel/Carousels'
 import { StorageService } from './services/storage/storage.service'
 import { AllTags } from './pages/per-picture-info/tags/resources/tags'
+import { Route, useHistory, useLocation } from 'react-router-dom'
+import { Confirm, confirmPath } from './pages/confirm/Confirm'
 
 const MOBILE_PX_THRESHOLD = 650
 
@@ -43,6 +45,8 @@ function App (): JSX.Element {
   const [isMobile, setIsMobile] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [animate, setAnimate] = useState(true)
+  const history = useHistory()
+  const location = useLocation()
 
   const onWindowResize = (): void => {
     if (window.innerWidth < MOBILE_PX_THRESHOLD) {
@@ -71,23 +75,22 @@ function App (): JSX.Element {
 
   const handleModalChange = (modalState: boolean): void => setIsModalOpen(modalState)
 
-  const [stage, setStage] = useState<'IMAGE_UPLOAD' | 'GLOBAL_INFO' | 'PER_PICTURE_INFO' | 'CONFIRM'>('IMAGE_UPLOAD')
-
   const [imageUploads, setImageUploads] = useState<File[]>([])
   const [globalInfo, setGlobalInfo] = useState<GlobalInfoData | null>(
     { consent: true, datetime: new Date(), department: 'Aine' }
   )
   const [, setPicturesInfo] = useState<PictureInfo[]>([])
 
-  let content: JSX.Element = <></>
+  const content: JSX.Element = <></>
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onImageUploadSubmit = (files: File[]): void => {
     setImageUploads(files)
-    setStage('GLOBAL_INFO')
+    history.push(globalInfoPath)
   }
 
   const onGlobalInfoSubmit = (globalInfoOutput: GlobalInfoData): void => {
     setGlobalInfo(globalInfoOutput)
-    setStage('PER_PICTURE_INFO')
+    history.push(perPictureInfoPath)
   }
 
   const onPerPictureInfoSubmit = async (picturesInfo: PictureInfo[]): Promise<void> => {
@@ -96,60 +99,37 @@ function App (): JSX.Element {
     await Promise.all(picturesInfo.map(async (pictureInfo, index): Promise<void> => {
       await storage.uploadMediaWithAnnotations(pictureInfo.file, Object.keys(pictureInfo.tags).filter((tag) => pictureInfo.tags[tag as AllTags]))
     }))
-    setStage('CONFIRM')
+    history.push(confirmPath)
   }
 
-  switch (stage) {
-    case 'IMAGE_UPLOAD':
-      content = (
-        <>
-          <Intro isMobile={isMobile}/>
-          <Send isMobile={isMobile} onSubmit={onImageUploadSubmit}/>
-        </>
-      )
-      break
+  const isPerPictureInfo = location.pathname === perPictureInfoPath
 
-    case 'GLOBAL_INFO':
-      content = (
-        <>
-          <GlobalInfo imageUploads={imageUploads} onSubmit={onGlobalInfoSubmit}/>
-        </>
-      )
-      break
-    case 'PER_PICTURE_INFO':
-      if (globalInfo === null) {
-        throw TypeError('globalInfo is null')
-      }
-      content = (
-        <>
+  return (
+    <div id="rootOrganizer" className={`${isModalOpen ? 'modalOpen' : ''}`}>
+      <Modal ref={modalRef} handleChange={handleModalChange} />
+      <Navbar isMobile={isMobile} modalRef={modalRef.current} />
+      {!isPerPictureInfo && <Carousels isMobile={isMobile} animate={animate} />}
+      <div id="pageContainer" className={`${isMobile ? 'mobile' : ''}${isPerPictureInfo ? ' noPadding' : ''}`}>
+        {content}
+        <Route exact path="/" >
+          <Intro isMobile={isMobile} />
+          <Send isMobile={isMobile} onSubmit={onImageUploadSubmit} />
+        </Route>
+        <Route exact path={globalInfoPath} >
+          <GlobalInfo imageUploads={imageUploads} onSubmit={onGlobalInfoSubmit} />
+        </Route>
+        <Route exact path={perPictureInfoPath} >
           {
             modalRef.current === null
               ? <></>
-              : <PerPictureInfo onSubmit={onPerPictureInfoSubmit} imageUploads={imageUploads} globalInfo={globalInfo} modalRef={modalRef.current} isMobile={isMobile}/>
+              : <PerPictureInfo onSubmit={onPerPictureInfoSubmit} imageUploads={imageUploads} globalInfo={globalInfo!} modalRef={modalRef.current} isMobile={isMobile} />
           }
-        </>
-      )
-      break
-    case 'CONFIRM':
-      content = (
-        <>
-        <p>c bon</p>
-        </>
-      )
-      break
-    default:
-      break
-  }
-
-  return (
-      <div id="rootOrganizer" className={`${isModalOpen ? 'modalOpen' : ''}`}>
-        <Modal ref={modalRef} handleChange={handleModalChange}/>
-        <Navbar isMobile={isMobile} modalRef={modalRef.current}/>
-        {stage !== 'PER_PICTURE_INFO' && <Carousels isMobile={isMobile} animate={animate}/>}
-        <div id="pageContainer" className={`${isMobile ? 'mobile' : ''}${stage === 'PER_PICTURE_INFO' ? ' noPadding' : ''}`}>
-          {content}
-        </div>
+        </Route>
+        <Route exact path={confirmPath} >
+          <Confirm />
+        </Route>
       </div>
+    </div>
   )
 }
 
