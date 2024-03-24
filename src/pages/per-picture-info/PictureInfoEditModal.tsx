@@ -15,20 +15,17 @@ export const PictureInfoEditModal: ModalInnerComponent = ({ close, context }: { 
   const [date, setDate] = useState<Date>(context.datetime)
   const [department, setDepartment] = useState<string | null>(context.department)
   const submit = (): void => {
-    context.patchInfo({ datetime: date, department: department as string, consent: true })
+    context.patchInfo({ datetime: date, department: department!, consent: true })
     close()
   }
 
   const dateValidity = isDateAndTimeBeforeNow(date)
 
-  const onDateTimeChange = (dateTime: Date): void => {
-    setDate(dateTime)
-    // todo : handle validity
-  }
+  const isValid = dateValidity.date && dateValidity.time
 
   return (<>
     <FontAwesomeIcon icon={faCircleXmark} className='closeIcon' onClick={close}/>
-    <GlobalInfoForm date={date} onDateTimeChange={onDateTimeChange} onDepartmentChange={(d) => setDepartment(d as string)} initialDepartment={context.department} dateValidity={dateValidity} />
-    <Button text='Valider' onClick={submit}/>
+    <GlobalInfoForm date={date} onDateTimeChange={setDate} onDepartmentChange={setDepartment} initialDepartment={context.department} dateValidity={dateValidity} />
+    <Button text='Valider' disabled={!isValid} onClick={submit}/>
   </>)
 }
