@@ -9,7 +9,7 @@ import Navbar from './global-components/navbar/Navbar'
 import { Carousels } from './global-components/carousel/Carousels'
 import { StorageService } from './services/storage/storage.service'
 import { AllTags } from './pages/per-picture-info/tags/resources/tags'
-import { Route, useHistory, useLocation } from 'react-router-dom'
+import { Redirect, Route, useHistory, useLocation } from 'react-router-dom'
 import { Confirm, confirmPath } from './pages/confirm/Confirm'
 
 const MOBILE_PX_THRESHOLD = 650
@@ -116,13 +116,17 @@ function App (): JSX.Element {
           <Send isMobile={isMobile} onSubmit={onImageUploadSubmit} />
         </Route>
         <Route exact path={globalInfoPath} >
-          <GlobalInfo imageUploads={imageUploads} onSubmit={onGlobalInfoSubmit} />
+         {imageUploads.length === 0 ? <Redirect to='/'/> : <GlobalInfo imageUploads={imageUploads} onSubmit={onGlobalInfoSubmit} />}
         </Route>
         <Route exact path={perPictureInfoPath} >
           {
-            modalRef.current === null
-              ? <></>
-              : <PerPictureInfo onSubmit={onPerPictureInfoSubmit} imageUploads={imageUploads} globalInfo={globalInfo!} modalRef={modalRef.current} isMobile={isMobile} />
+          imageUploads.length === 0
+            ? <Redirect to="/"/>
+            : globalInfo === null
+              ? <Redirect to={globalInfoPath}/>
+              : modalRef.current === null
+                ? <></>
+                : <PerPictureInfo onSubmit={onPerPictureInfoSubmit} imageUploads={imageUploads} globalInfo={globalInfo} modalRef={modalRef.current} isMobile={isMobile} />
           }
         </Route>
         <Route exact path={confirmPath} >
