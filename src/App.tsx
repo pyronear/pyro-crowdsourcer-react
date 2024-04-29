@@ -82,7 +82,6 @@ function App (): JSX.Element {
   const [, setPicturesInfo] = useState<PictureInfo[]>([])
 
   const content: JSX.Element = <></>
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onImageUploadSubmit = (files: File[]): void => {
     setImageUploads(files)
     history.push(globalInfoPath)
@@ -104,6 +103,28 @@ function App (): JSX.Element {
 
   const isPerPictureInfo = location.pathname === perPictureInfoPath
 
+  const routes = <>
+    <Route exact path="/" >
+      <Intro isMobile={isMobile} />
+      <Send isMobile={isMobile} onSubmit={onImageUploadSubmit} />
+    </Route>
+    <Route exact path={globalInfoPath} >
+      {imageUploads.length === 0 ? <Redirect to='/' /> : <GlobalInfo imageUploads={imageUploads} onSubmit={onGlobalInfoSubmit} />}
+    </Route>
+    <Route exact path={perPictureInfoPath} >
+      {(() => {
+        if (imageUploads.length === 0) return <Redirect to="/" />
+        if (globalInfo === null) return <Redirect to={globalInfoPath} />
+        if (modalRef.current === null) return <></>
+        return <PerPictureInfo onSubmit={onPerPictureInfoSubmit} imageUploads={imageUploads} globalInfo={globalInfo} modalRef={modalRef.current} isMobile={isMobile} />
+      })()
+      }
+    </Route>
+    <Route exact path={confirmPath} >
+      <Confirm />
+    </Route>
+  </>
+
   return (
     <div id="rootOrganizer" className={`${isModalOpen ? 'modalOpen' : ''}`}>
       <Modal ref={modalRef} handleChange={handleModalChange} />
@@ -111,27 +132,7 @@ function App (): JSX.Element {
       {!isPerPictureInfo && <Carousels isMobile={isMobile} animate={animate} />}
       <div id="pageContainer" className={`${isMobile ? 'mobile' : ''}${isPerPictureInfo ? ' noPadding' : ''}`}>
         {content}
-        <Route exact path="/" >
-          <Intro isMobile={isMobile} />
-          <Send isMobile={isMobile} onSubmit={onImageUploadSubmit} />
-        </Route>
-        <Route exact path={globalInfoPath} >
-         {imageUploads.length === 0 ? <Redirect to='/'/> : <GlobalInfo imageUploads={imageUploads} onSubmit={onGlobalInfoSubmit} />}
-        </Route>
-        <Route exact path={perPictureInfoPath} >
-          {
-          imageUploads.length === 0
-            ? <Redirect to="/"/>
-            : globalInfo === null
-              ? <Redirect to={globalInfoPath}/>
-              : modalRef.current === null
-                ? <></>
-                : <PerPictureInfo onSubmit={onPerPictureInfoSubmit} imageUploads={imageUploads} globalInfo={globalInfo} modalRef={modalRef.current} isMobile={isMobile} />
-          }
-        </Route>
-        <Route exact path={confirmPath} >
-          <Confirm />
-        </Route>
+        {routes}
       </div>
     </div>
   )
