@@ -9,7 +9,7 @@ import Navbar from './global-components/navbar/Navbar'
 import { Carousels } from './global-components/carousel/Carousels'
 import { StorageService } from './services/storage/storage.service'
 import { AllTags } from './pages/per-picture-info/tags/resources/tags'
-import { Route, useHistory, useLocation } from 'react-router-dom'
+import { Redirect, Route, useHistory, useLocation } from 'react-router-dom'
 import { Confirm, confirmPath } from './pages/confirm/Confirm'
 
 const MOBILE_PX_THRESHOLD = 650
@@ -82,7 +82,6 @@ function App (): JSX.Element {
   const [, setPicturesInfo] = useState<PictureInfo[]>([])
 
   const content: JSX.Element = <></>
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onImageUploadSubmit = (files: File[]): void => {
     setImageUploads(files)
     history.push(globalInfoPath)
@@ -104,6 +103,28 @@ function App (): JSX.Element {
 
   const isPerPictureInfo = location.pathname === perPictureInfoPath
 
+  const routes = <>
+    <Route exact path="/" >
+      <Intro isMobile={isMobile} />
+      <Send isMobile={isMobile} onSubmit={onImageUploadSubmit} />
+    </Route>
+    <Route exact path={globalInfoPath} >
+      {imageUploads.length === 0 ? <Redirect to='/' /> : <GlobalInfo imageUploads={imageUploads} onSubmit={onGlobalInfoSubmit} />}
+    </Route>
+    <Route exact path={perPictureInfoPath} >
+      {(() => {
+        if (imageUploads.length === 0) return <Redirect to="/" />
+        if (globalInfo === null) return <Redirect to={globalInfoPath} />
+        if (modalRef.current === null) return <></>
+        return <PerPictureInfo onSubmit={onPerPictureInfoSubmit} imageUploads={imageUploads} globalInfo={globalInfo} modalRef={modalRef.current} isMobile={isMobile} />
+      })()
+      }
+    </Route>
+    <Route exact path={confirmPath} >
+      <Confirm />
+    </Route>
+  </>
+
   return (
     <div id="rootOrganizer" className={`${isModalOpen ? 'modalOpen' : ''}`}>
       <Modal ref={modalRef} handleChange={handleModalChange} />
@@ -111,23 +132,7 @@ function App (): JSX.Element {
       {!isPerPictureInfo && <Carousels isMobile={isMobile} animate={animate} />}
       <div id="pageContainer" className={`${isMobile ? 'mobile' : ''}${isPerPictureInfo ? ' noPadding' : ''}`}>
         {content}
-        <Route exact path="/" >
-          <Intro isMobile={isMobile} />
-          <Send isMobile={isMobile} onSubmit={onImageUploadSubmit} />
-        </Route>
-        <Route exact path={globalInfoPath} >
-          <GlobalInfo imageUploads={imageUploads} onSubmit={onGlobalInfoSubmit} />
-        </Route>
-        <Route exact path={perPictureInfoPath} >
-          {
-            modalRef.current === null
-              ? <></>
-              : <PerPictureInfo onSubmit={onPerPictureInfoSubmit} imageUploads={imageUploads} globalInfo={globalInfo!} modalRef={modalRef.current} isMobile={isMobile} />
-          }
-        </Route>
-        <Route exact path={confirmPath} >
-          <Confirm />
-        </Route>
+        {routes}
       </div>
     </div>
   )
