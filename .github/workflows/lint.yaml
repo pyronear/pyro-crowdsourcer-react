@@ -15,5 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - run: npm install --frozen-lockfile
+    - uses: actions/setup-node@v4
+      with:
+        node-version-file: .nvmrc
+    - run: npm ci
     - run: npm run lint -c .eslintrc

@@ -2,6 +2,12 @@
 
 set -euo pipefail
 
+NODE_VERSION=$(node --version 2>/dev/null || true)
+if [[ "$NODE_VERSION" != "v24.22.1" ]]; then
+  echo "Node.js 24.22.1 is required; found ${NODE_VERSION:-none}." >&2
+  exit 1
+fi
+
 which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
 eval $(ssh-agent -s)
 echo "$SERVER_PRIVATE_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
@@ -15,7 +21,7 @@ REMOTE_PATH="/var/www/crowdsourcer.bruhie.re/"
 OUT="./build"
 CONNECTION="root@$SERVER_IP"
 
-npm install --no-optional
+npm ci --omit=optional
 npm run build
 
 echo -e "Removing remote folder ..."
