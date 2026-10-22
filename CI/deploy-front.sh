@@ -2,9 +2,10 @@
 
 set -euo pipefail
 
+read -r REQUIRED_NODE_VERSION < .nvmrc
 NODE_VERSION=$(node --version 2>/dev/null || true)
-if [[ "$NODE_VERSION" != "v24.22.1" ]]; then
-  echo "Node.js 24.22.1 is required; found ${NODE_VERSION:-none}." >&2
+if [[ "$NODE_VERSION" != "v$REQUIRED_NODE_VERSION" ]]; then
+  echo "Node.js $REQUIRED_NODE_VERSION is required; found ${NODE_VERSION:-none}." >&2
   exit 1
 fi
 
