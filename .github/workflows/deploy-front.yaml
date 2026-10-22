@@ -18,6 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/setup-node@v4
+      with:
+        node-version-file: .nvmrc
     - run: CI/deploy-front.sh
       env:
         SERVER_PRIVATE_SSH_KEY: '${{ secrets.SERVER_PRIVATE_SSH_KEY }}'
@@ -27,6 +30,9 @@ jobs:
     if: ${{ contains(github.event.*.labels.*.name, 'deploy') }}
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/setup-node@v4
+      with:
+        node-version-file: .nvmrc
     - uses: actions-ecosystem/action-remove-labels@v1
       with:
         labels: deploy
